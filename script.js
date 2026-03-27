@@ -4,6 +4,7 @@ import { OrbitControls } from "./vendor/three/examples/jsm/controls/OrbitControl
 import { VRMLoaderPlugin, VRMUtils } from "./vendor/three-vrm.module.js";
 
 const header = document.querySelector(".site-header");
+const customCursor = document.querySelector("#customCursor");
 const pageLoader = document.querySelector("#pageLoader");
 const pageLoaderText = document.querySelector("#pageLoaderText");
 const navToggle = document.querySelector(".nav-toggle");
@@ -24,6 +25,7 @@ const heroMedia = document.querySelector("#heroMedia");
 const hologramStage = document.querySelector("#hologramStage");
 const hologramStatus = document.querySelector("#hologramStatus");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const supportsFinePointer = window.matchMedia("(pointer: fine)").matches;
 let pageReady = false;
 let modelSettled = !hologramStage;
 
@@ -51,6 +53,17 @@ const setPointerOrigin = (event) => {
   target.style.setProperty("--pointer-y", `${y}%`);
 };
 
+const updateCustomCursor = (event) => {
+  if (!customCursor || !supportsFinePointer) return;
+  customCursor.style.left = `${event.clientX}px`;
+  customCursor.style.top = `${event.clientY}px`;
+};
+
+const setCustomCursorActive = (isActive) => {
+  if (!customCursor || !supportsFinePointer) return;
+  customCursor.classList.toggle("is-active", isActive);
+};
+
 window.addEventListener(
   "load",
   () => {
@@ -59,6 +72,36 @@ window.addEventListener(
   },
   { once: true }
 );
+
+if (customCursor && supportsFinePointer) {
+  window.addEventListener("pointermove", (event) => {
+    customCursor.classList.add("is-visible");
+    updateCustomCursor(event);
+  });
+
+  window.addEventListener("pointerdown", () => {
+    setCustomCursorActive(true);
+  });
+
+  window.addEventListener("pointerup", () => {
+    setCustomCursorActive(false);
+  });
+
+  document.addEventListener("mouseleave", () => {
+    customCursor.classList.remove("is-visible");
+    setCustomCursorActive(false);
+  });
+
+  document.querySelectorAll("a, button, .art-card, .lightbox-close").forEach((item) => {
+    item.addEventListener("pointerenter", () => {
+      setCustomCursorActive(true);
+    });
+
+    item.addEventListener("pointerleave", () => {
+      setCustomCursorActive(false);
+    });
+  });
+}
 
 window.setTimeout(() => {
   pageReady = true;
