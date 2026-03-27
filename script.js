@@ -41,6 +41,16 @@ const hidePageLoader = () => {
   document.body.classList.remove("is-loading");
 };
 
+const setPointerOrigin = (event) => {
+  const target = event.currentTarget;
+  if (!(target instanceof HTMLElement)) return;
+  const rect = target.getBoundingClientRect();
+  const x = ((event.clientX - rect.left) / rect.width) * 100;
+  const y = ((event.clientY - rect.top) / rect.height) * 100;
+  target.style.setProperty("--pointer-x", `${x}%`);
+  target.style.setProperty("--pointer-y", `${y}%`);
+};
+
 window.addEventListener(
   "load",
   () => {
@@ -98,6 +108,24 @@ navLinks.forEach((link) => {
   });
 });
 
+document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+  anchor.addEventListener("click", (event) => {
+    const href = anchor.getAttribute("href");
+    if (!href || href === "#") return;
+    const target = document.querySelector(href);
+    if (!target) return;
+    event.preventDefault();
+    target.scrollIntoView({
+      behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+      block: "start",
+    });
+  });
+});
+
+document.querySelectorAll(".button, .art-card, .site-nav a").forEach((item) => {
+  item.addEventListener("pointermove", setPointerOrigin);
+});
+
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -112,6 +140,9 @@ const observer = new IntersectionObserver(
 );
 
 revealItems.forEach((item) => observer.observe(item));
+revealItems.forEach((item, index) => {
+  item.style.setProperty("--stagger-delay", `${index * 80}ms`);
+});
 
 if (galleryGrid) {
   artworks.forEach((artwork, index) => {
@@ -143,6 +174,7 @@ if (galleryGrid) {
     const description = document.createElement("p");
     description.textContent = artwork.note;
 
+    article.style.setProperty("--stagger-delay", `${(index % 6) * 70}ms`);
     frame.appendChild(image);
     meta.append(label, title, description);
     article.append(frame, meta);

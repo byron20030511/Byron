@@ -182,8 +182,40 @@ audio {
 }
 
 .site-nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
   color: var(--muted);
   font-size: 0.95rem;
+  transition: color 220ms ease, background-color 220ms ease, transform 220ms ease;
+}
+
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(31, 27, 22, 0.08);
+  transform: scaleX(0.35);
+  transform-origin: center;
+  opacity: 0;
+  transition: transform 240ms ease, opacity 240ms ease;
+}
+
+.site-nav a:hover,
+.site-nav a:focus-visible {
+  color: var(--ink);
+  transform: translateY(-1px);
+}
+
+.site-nav a:hover::after,
+.site-nav a:focus-visible::after {
+  transform: scaleX(1);
+  opacity: 1;
 }
 
 .nav-toggle {
@@ -339,16 +371,67 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
   min-height: 3rem;
   padding: 0.85rem 1.25rem;
   border: 2px solid var(--ink);
   border-radius: 999px;
   font-weight: 600;
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  isolation: isolate;
+  transition: transform 220ms ease, box-shadow 220ms ease, color 220ms ease;
+}
+
+.button::before,
+.button::after,
+.art-card::before {
+  content: "";
+  position: absolute;
+  left: var(--pointer-x, 50%);
+  top: var(--pointer-y, 50%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.button::before {
+  width: 14rem;
+  height: 14rem;
+  background: rgba(31, 27, 22, 0.08);
+  transform: translate(-50%, -50%) scale(0.12);
+  opacity: 0;
+  transition: transform 360ms ease, opacity 300ms ease;
+  z-index: -1;
+}
+
+.button::after {
+  width: 3.9rem;
+  height: 3.9rem;
+  border: 1px solid rgba(31, 27, 22, 0.18);
+  transform: translate(-50%, -50%) scale(0.3);
+  opacity: 0;
+  transition: transform 420ms ease, opacity 300ms ease;
+  z-index: -1;
 }
 
 .button:hover {
-  transform: translateY(-1px) rotate(-0.5deg);
+  transform: translateY(-2px) scale(1.01);
+}
+
+.button:hover::before,
+.button:hover::after,
+.button:focus-visible::before,
+.button:focus-visible::after {
+  opacity: 1;
+}
+
+.button:hover::before,
+.button:focus-visible::before {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.button:hover::after,
+.button:focus-visible::after {
+  transform: translate(-50%, -50%) scale(1.35);
 }
 
 .button-primary {
@@ -550,6 +633,7 @@ h3 {
 
 .art-card {
   display: block;
+  position: relative;
   break-inside: avoid;
   margin-bottom: 1rem;
   overflow: hidden;
@@ -558,7 +642,18 @@ h3 {
   background: var(--paper-soft);
   box-shadow: var(--shadow);
   cursor: pointer;
-  transition: transform 220ms ease, box-shadow 220ms ease, opacity 220ms ease;
+  isolation: isolate;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 260ms ease, opacity 220ms ease, filter 260ms ease;
+}
+
+.art-card::before {
+  width: 18rem;
+  height: 18rem;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0) 66%);
+  transform: translate(-50%, -50%) scale(0.24);
+  opacity: 0;
+  transition: transform 420ms ease, opacity 320ms ease;
+  z-index: 1;
 }
 
 .art-card:nth-child(3n + 1) {
@@ -585,10 +680,19 @@ h3 {
 
 .art-card.is-visible {
   opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .art-card:hover {
-  transform: translateY(-4px) rotate(0deg);
+  transform: translateY(-8px) scale(1.018) !important;
+  box-shadow: 0 26px 50px rgba(73, 56, 34, 0.14);
+  filter: saturate(1.02);
+}
+
+.art-card:hover::before,
+.art-card:focus-visible::before {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .art-frame {
@@ -600,6 +704,13 @@ h3 {
   width: 100%;
   height: auto;
   object-fit: cover;
+  transform: scale(1);
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.art-card:hover .art-frame img,
+.art-card:focus-visible .art-frame img {
+  transform: scale(1.04) translateY(-4px);
 }
 
 .art-meta {
@@ -736,7 +847,7 @@ h3 {
 
 .floating-top-button:hover,
 .floating-audio-button:hover {
-  transform: translateY(-1px) rotate(-0.4deg);
+  transform: translateY(-3px) scale(1.02);
 }
 
 .floating-top-icon,
@@ -839,8 +950,11 @@ h3 {
 
 .reveal {
   opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 650ms ease, transform 650ms ease;
+  transform: translateY(28px);
+  transition:
+    opacity 760ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 760ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--stagger-delay, 0ms);
 }
 
 .reveal.is-visible {
@@ -904,6 +1018,10 @@ h3 {
     border-radius: 22px;
     background: rgba(255, 253, 247, 0.98);
     box-shadow: var(--shadow);
+  }
+
+  .site-nav a {
+    justify-content: flex-start;
   }
 
   .site-header.menu-open .site-nav {
