@@ -131,6 +131,12 @@ audio {
     box-shadow 220ms ease;
 }
 
+body.lightbox-open .custom-cursor {
+  mix-blend-mode: difference;
+  border-color: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .custom-cursor.is-visible {
   opacity: 1;
 }

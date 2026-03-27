@@ -43,6 +43,10 @@ const hidePageLoader = () => {
   document.body.classList.remove("is-loading");
 };
 
+const syncLightboxCursorState = () => {
+  document.body.classList.toggle("lightbox-open", Boolean(lightbox?.open));
+};
+
 const setPointerOrigin = (event) => {
   const target = event.currentTarget;
   if (!(target instanceof HTMLElement)) return;
@@ -229,6 +233,7 @@ if (galleryGrid) {
       lightboxImage.alt = image.alt;
       lightboxCaption.textContent = `${artwork.title} / ${artwork.note}`;
       lightbox.showModal();
+      syncLightboxCursorState();
     };
 
     article.addEventListener("click", openLightbox);
@@ -245,6 +250,11 @@ if (galleryGrid) {
 
 lightboxClose?.addEventListener("click", () => {
   lightbox?.close();
+});
+
+lightbox?.addEventListener("close", () => {
+  syncLightboxCursorState();
+  setCustomCursorActive(false);
 });
 
 lightbox?.addEventListener("click", (event) => {
