@@ -1,6 +1,10 @@
 import * as THREE from "./vendor/three/three.module.js";
 import { GLTFLoader } from "./vendor/three/examples/jsm/loaders/GLTFLoader.js";
 import { VRMLoaderPlugin, VRMUtils } from "./vendor/three-vrm.module.js";
+import {
+  VRMAnimationLoaderPlugin,
+  createVRMAnimationClip,
+} from "./vendor/three-vrm-animation.module.js";
 
 const header = document.querySelector(".site-header");
 const customCursor = document.querySelector("#customCursor");
@@ -413,9 +417,12 @@ if (sceneBackground) {
 
   const loader = new GLTFLoader();
   loader.register((parser) => new VRMLoaderPlugin(parser));
+  const animationLoader = new GLTFLoader();
+  animationLoader.register((parser) => new VRMAnimationLoaderPlugin(parser));
   const modelGroup = new THREE.Group();
   scene.add(modelGroup);
   let currentVrm = null;
+  let animationMixer = null;
   let modelBaseY = 0;
   let targetPointerX = 0;
   let targetPointerY = 0;
@@ -456,7 +463,7 @@ if (sceneBackground) {
       const box = new THREE.Box3().setFromObject(vrmScene);
       const size = box.getSize(new THREE.Vector3());
       const maxAxis = Math.max(size.x, size.y, size.z) || 1;
-      const scale = 6.6 / maxAxis;
+      const scale = (6.6 / maxAxis) * 0.9;
 
       vrmScene.scale.setScalar(scale);
       vrmScene.position.set(0, 0, 0);
@@ -484,7 +491,7 @@ if (sceneBackground) {
       modelBaseY = -(alignedBox.min.y + 3.15);
       vrmScene.position.y += modelBaseY;
       vrmScene.position.x += 1.15;
-      vrmScene.position.z -= 0.85;
+      vrmScene.position.z += 1.15;
 
       modelGroup.add(vrmScene);
 
@@ -492,10 +499,44 @@ if (sceneBackground) {
       const fitDistance = Math.max(alignedSize.y * 0.95, alignedSize.x * 1.1, 6.8);
       camera.position.set(1.1, fitHeight, fitDistance);
       camera.lookAt(1.1, Math.max(alignedSize.y * 0.54, 1.65), -0.4);
-      setSceneStatus("Background model ready.", "hidden");
-      updateLoaderText("Opening board...");
-      modelSettled = true;
-      hidePageLoader();
+
+      updateLoaderText("Loading background motion...");
+      setSceneStatus("Loading motion clip...");
+
+      animationLoader.load(
+        "resources/3D/明日の私に幸あれ/vrma/明日の私に幸あれ.vrma",
+        (animationGltf) => {
+          const vrmAnimation = animationGltf.userData.vrmAnimations?.[0];
+
+          if (!vrmAnimation) {
+            setSceneStatus("Motion file loaded, but no VRM animation was found.", "error");
+            updateLoaderText("Opening board...");
+            modelSettled = true;
+            hidePageLoader();
+            return;
+          }
+
+          const clip = createVRMAnimationClip(vrmAnimation, vrm);
+          animationMixer = new THREE.AnimationMixer(vrm.scene);
+          const action = animationMixer.clipAction(clip);
+          action.reset();
+          action.setLoop(THREE.LoopRepeat, Infinity);
+          action.play();
+
+          setSceneStatus("Background model ready.", "hidden");
+          updateLoaderText("Opening board...");
+          modelSettled = true;
+          hidePageLoader();
+        },
+        undefined,
+        (animationError) => {
+          console.error("VRMA load failed.", animationError);
+          setSceneStatus("Motion clip could not load. Showing the model without animation.", "error");
+          updateLoaderText("Opening board...");
+          modelSettled = true;
+          hidePageLoader();
+        }
+      );
     },
     undefined,
     (error) => {
@@ -533,12 +574,13 @@ if (sceneBackground) {
 
     modelGroup.position.x = mouseOffsetX;
     modelGroup.position.y = Math.sin(elapsed * 0.9) * 0.08 + scrollOffsetY + mouseOffsetY;
-    modelGroup.rotation.y = scrollRotateY + mouseOffsetX * 0.12 + elapsed * 0.04;
+    modelGroup.rotation.y = scrollRotateY + mouseOffsetX * 0.12;
     modelGroup.rotation.x = mouseOffsetY * 0.08;
 
     pedestal.position.x = 1.15 + mouseOffsetX * 0.45;
     pedestal.position.y = -3.2 + scrollOffsetY * 0.24;
     pedestal.rotation.y = elapsed * 0.08 + scrollRotateY * 0.5;
+    animationMixer?.update(delta);
     currentVrm?.update(delta);
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
