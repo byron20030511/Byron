@@ -103,9 +103,68 @@ audio {
 }
 
 .page-shell {
+  position: relative;
+  z-index: 2;
   width: min(var(--max-width), calc(100% - 2rem));
   margin: 0 auto;
   padding: 0 0 4rem;
+}
+
+.scene-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.scene-background canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.scene-aura,
+.scene-vignette,
+.scene-status {
+  position: absolute;
+  pointer-events: none;
+}
+
+.scene-aura {
+  inset: 0;
+  background:
+    radial-gradient(circle at 60% 42%, rgba(72, 66, 116, 0.14), transparent 28%),
+    radial-gradient(circle at 50% 72%, rgba(31, 30, 51, 0.11), transparent 20%);
+}
+
+.scene-vignette {
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(246, 245, 251, 0.04) 0%, rgba(246, 245, 251, 0.22) 22%, rgba(246, 245, 251, 0.34) 100%),
+    radial-gradient(circle at center, transparent 44%, rgba(246, 245, 251, 0.28) 100%);
+}
+
+.scene-status {
+  left: 50%;
+  bottom: 1.75rem;
+  transform: translateX(-50%);
+  z-index: 1;
+  padding: 0.7rem 0.95rem;
+  border: 1px solid rgba(31, 30, 51, 0.1);
+  border-radius: 999px;
+  background: rgba(248, 246, 253, 0.72);
+  color: var(--muted);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 28px rgba(31, 30, 51, 0.08);
+  transition: opacity 280ms ease, visibility 280ms ease;
+}
+
+.scene-status.is-hidden {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .custom-cursor {
@@ -510,99 +569,24 @@ h3 {
   display: none;
 }
 
-.hologram-shell {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 1 / 1.18;
-  border: 0;
-  border-radius: 40px;
-  background:
-    radial-gradient(circle at 50% 16%, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.2) 34%, transparent 62%),
-    radial-gradient(circle at 50% 72%, rgba(85, 80, 126, 0.16), transparent 24%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(242, 240, 251, 0.36) 56%, transparent 100%);
+.background-note {
+  min-height: 100%;
+  padding: 1.5rem;
+  border: 1px solid rgba(31, 30, 51, 0.08);
+  border-radius: 34px;
+  background: rgba(248, 246, 253, 0.48);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 16px 34px rgba(31, 30, 51, 0.05);
 }
 
-.hologram-stage {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  cursor: grab;
-  touch-action: none;
+.background-note h3 {
+  margin-bottom: 0.8rem;
 }
 
-.hologram-stage.is-dragging {
-  cursor: grabbing;
-}
-
-.hologram-status {
-  position: absolute;
-  inset: auto 1rem 1rem 1rem;
-  z-index: 3;
-  padding: 0.8rem 0.95rem;
-  border: 1px solid rgba(31, 30, 51, 0.12);
-  border-radius: 16px;
-  background: rgba(248, 246, 253, 0.9);
-  color: var(--ink);
-  font-size: 0.88rem;
-  line-height: 1.45;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 24px rgba(31, 30, 51, 0.08);
-}
-
-.hologram-status.is-hidden {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.hologram-status.is-error {
-  border-color: rgba(101, 78, 155, 0.28);
-  color: #4f3d7b;
-}
-
-.hologram-grid,
-.hologram-core,
-.hologram-pedestal {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.hologram-grid {
-  background: none;
-}
-
-.hologram-core {
-  background:
-    radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.65), transparent 14%),
-    radial-gradient(circle at 50% 76%, rgba(98, 92, 147, 0.16), transparent 26%);
-}
-
-.hologram-pedestal::before,
-.hologram-pedestal::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 50%;
-}
-
-.hologram-pedestal::before {
-  bottom: 11%;
-  width: 46%;
-  height: 9%;
-  border: 1px solid rgba(31, 30, 51, 0.14);
-  box-shadow:
-    0 20px 34px rgba(31, 30, 51, 0.1),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-}
-
-.hologram-pedestal::after {
-  bottom: 8%;
-  width: 36%;
-  height: 6%;
-  background: rgba(31, 30, 51, 0.12);
-  filter: blur(18px);
+.background-note p:last-child {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
 }
 
 .scribble-tag {
@@ -616,15 +600,6 @@ h3 {
   background: rgba(241, 239, 250, 0.92);
   font-size: 0.82rem;
   transform: rotate(2deg);
-}
-
-#hologramStage canvas {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
 }
 
 .mini-note {
@@ -1095,6 +1070,12 @@ h3 {
     bottom: 1rem;
     transform: none;
   }
+
+  .scene-aura {
+    background:
+      radial-gradient(circle at 50% 28%, rgba(72, 66, 116, 0.12), transparent 30%),
+      radial-gradient(circle at 50% 72%, rgba(31, 30, 51, 0.08), transparent 24%);
+  }
 }
 
 @media (max-width: 640px) {
@@ -1157,5 +1138,11 @@ h3 {
   .page-loader-panel {
     padding: 1.15rem 1.1rem;
     border-radius: 22px;
+  }
+
+  .scene-status {
+    bottom: 1rem;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.84rem;
   }
 }

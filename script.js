@@ -1,6 +1,5 @@
 import * as THREE from "./vendor/three/three.module.js";
 import { GLTFLoader } from "./vendor/three/examples/jsm/loaders/GLTFLoader.js";
-import { OrbitControls } from "./vendor/three/examples/jsm/controls/OrbitControls.js";
 import { VRMLoaderPlugin, VRMUtils } from "./vendor/three-vrm.module.js";
 
 const header = document.querySelector(".site-header");
@@ -22,12 +21,12 @@ const floatingTopButton = document.querySelector("#floatingTopButton");
 const floatingAudioToggle = document.querySelector("#floatingAudioToggle");
 const floatingAudioText = document.querySelector(".floating-audio-text");
 const heroMedia = document.querySelector("#heroMedia");
-const hologramStage = document.querySelector("#hologramStage");
-const hologramStatus = document.querySelector("#hologramStatus");
+const sceneBackground = document.querySelector("#sceneBackground");
+const sceneStatus = document.querySelector("#sceneStatus");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const supportsFinePointer = window.matchMedia("(pointer: fine)").matches;
 let pageReady = false;
-let modelSettled = !hologramStage;
+let modelSettled = !sceneBackground;
 
 document.body.classList.add("is-loading");
 
@@ -355,87 +354,61 @@ if (!prefersReducedMotion.matches && heroMedia) {
   updateHeroMedia();
 }
 
-if (hologramStage) {
-  const setHologramStatus = (message, state = "info") => {
-    if (!hologramStatus) return;
-    hologramStatus.textContent = message;
-    hologramStatus.classList.toggle("is-hidden", state === "hidden");
-    hologramStatus.classList.toggle("is-error", state === "error");
+if (sceneBackground) {
+  const setSceneStatus = (message, state = "info") => {
+    if (!sceneStatus) return;
+    sceneStatus.textContent = message;
+    sceneStatus.classList.toggle("is-hidden", state === "hidden");
+    sceneStatus.dataset.state = state;
   };
 
   if (window.location.protocol === "file:") {
     updateLoaderText("3D preview needs a local server to load reliably.");
-    setHologramStatus(
+    setSceneStatus(
       "3D preview may be blocked when this page is opened with file://. Use a local server for reliable loading.",
       "error"
     );
   } else {
-    updateLoaderText("Preparing 3D character preview...");
-    setHologramStatus("Loading 3D preview...");
+    updateLoaderText("Preparing floating background model...");
+    setSceneStatus("Loading background model...");
   }
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(hologramStage.clientWidth, hologramStage.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, supportsFinePointer ? 1.35 : 1));
+  renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  hologramStage.appendChild(renderer.domElement);
+  sceneBackground.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0xf6f5fb, 9, 22);
 
   const camera = new THREE.PerspectiveCamera(
-    26,
-    hologramStage.clientWidth / hologramStage.clientHeight,
+    28,
+    window.innerWidth / window.innerHeight,
     0.1,
     100
   );
-  camera.position.set(0, 1.8, 8.4);
+  camera.position.set(1.2, 1.4, 10.8);
 
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.06;
-  controls.enablePan = false;
-  controls.minDistance = 4.4;
-  controls.maxDistance = 11;
-  controls.minPolarAngle = Math.PI * 0.22;
-  controls.maxPolarAngle = Math.PI * 0.68;
-  controls.autoRotate = !prefersReducedMotion.matches;
-  controls.autoRotateSpeed = 0.65;
-  controls.target.set(0, 1.25, 0);
-  controls.update();
-
-  controls.addEventListener("start", () => {
-    hologramStage.classList.add("is-dragging");
-    controls.autoRotate = false;
-  });
-
-  controls.addEventListener("end", () => {
-    hologramStage.classList.remove("is-dragging");
-    if (!prefersReducedMotion.matches) {
-      window.setTimeout(() => {
-        controls.autoRotate = true;
-      }, 1200);
-    }
-  });
-
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.7);
-  const keyLight = new THREE.DirectionalLight(0xfff8f0, 2.6);
-  keyLight.position.set(3.5, 7, 5.5);
-  const fillLight = new THREE.DirectionalLight(0xffffff, 1.15);
-  fillLight.position.set(-3.8, 4.5, 3.2);
-  const rimLight = new THREE.DirectionalLight(0xf3efe6, 0.9);
-  rimLight.position.set(-2.6, 3.4, -4.8);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1.45);
+  const keyLight = new THREE.DirectionalLight(0xf2efff, 2.2);
+  keyLight.position.set(4.8, 6.8, 5.8);
+  const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  fillLight.position.set(-5.4, 4.1, 3.6);
+  const rimLight = new THREE.PointLight(0x7168b3, 1.35, 24);
+  rimLight.position.set(0.8, 2.4, -5.6);
   scene.add(ambientLight, keyLight, fillLight, rimLight);
 
   const pedestal = new THREE.Mesh(
-    new THREE.CylinderGeometry(2.1, 2.7, 0.3, 48, 1, true),
+    new THREE.CylinderGeometry(2.9, 3.6, 0.38, 64, 1, true),
     new THREE.MeshBasicMaterial({
-      color: 0xb9b1a4,
+      color: 0x554f7d,
       transparent: true,
-      opacity: 0.08,
+      opacity: 0.09,
       wireframe: true,
     })
   );
-  pedestal.position.y = -2.9;
+  pedestal.position.set(1.15, -3.2, -1.4);
   scene.add(pedestal);
 
   const loader = new GLTFLoader();
@@ -443,13 +416,36 @@ if (hologramStage) {
   const modelGroup = new THREE.Group();
   scene.add(modelGroup);
   let currentVrm = null;
+  let baseYOffset = -3.15;
+  let targetPointerX = 0;
+  let targetPointerY = 0;
+  let pointerX = 0;
+  let pointerY = 0;
+  let targetScroll = 0;
+  let scrollDrift = 0;
+
+  if (supportsFinePointer && !prefersReducedMotion.matches) {
+    window.addEventListener("pointermove", (event) => {
+      targetPointerX = (event.clientX / window.innerWidth - 0.5) * 2;
+      targetPointerY = (event.clientY / window.innerHeight - 0.5) * 2;
+    });
+  }
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      const maxScroll = Math.max(document.body.scrollHeight - window.innerHeight, 1);
+      targetScroll = Math.min(window.scrollY / maxScroll, 1);
+    },
+    { passive: true }
+  );
 
   loader.load(
     "resources/3D/VRM/Eku_VRM_v1_0_0.vrm",
     (gltf) => {
       const vrm = gltf.userData.vrm;
       if (!vrm) {
-        setHologramStatus("VRM file loaded, but no VRM scene was found.", "error");
+        setSceneStatus("VRM file loaded, but no VRM scene was found.", "error");
         return;
       }
 
@@ -485,18 +481,18 @@ if (hologramStage) {
 
       vrmScene.position.x -= alignedCenter.x;
       vrmScene.position.z -= alignedCenter.z;
-      vrmScene.position.y -= alignedBox.min.y + 2.85;
+      baseYOffset = -(alignedBox.min.y + 3.15);
+      vrmScene.position.y += baseYOffset;
+      vrmScene.position.x += 1.15;
+      vrmScene.position.z -= 0.85;
 
       modelGroup.add(vrmScene);
 
-      const fitHeight = Math.max(alignedSize.y * 0.5, 1.65);
-      const fitDistance = Math.max(alignedSize.y * 0.78, alignedSize.x * 0.92, 3.9);
-      camera.position.set(0, fitHeight, fitDistance);
-      controls.minDistance = Math.max(fitDistance * 0.8, 2.3);
-      controls.maxDistance = Math.max(fitDistance * 1.32, controls.minDistance + 1);
-      controls.target.set(0, Math.max(alignedSize.y * 0.52, 1.2), 0);
-      controls.update();
-      setHologramStatus("3D preview ready.", "hidden");
+      const fitHeight = Math.max(alignedSize.y * 0.56, 1.6);
+      const fitDistance = Math.max(alignedSize.y * 0.95, alignedSize.x * 1.1, 6.8);
+      camera.position.set(1.1, fitHeight, fitDistance);
+      camera.lookAt(1.1, Math.max(alignedSize.y * 0.54, 1.65), -0.4);
+      setSceneStatus("Background model ready.", "hidden");
       updateLoaderText("Opening board...");
       modelSettled = true;
       hidePageLoader();
@@ -504,7 +500,7 @@ if (hologramStage) {
     undefined,
     (error) => {
       console.error("VRM load failed.", error);
-      setHologramStatus(
+      setSceneStatus(
         "3D preview could not load. Try opening the site from a local web server instead of file://.",
         "error"
       );
@@ -515,9 +511,8 @@ if (hologramStage) {
   );
 
   const resizeRenderer = () => {
-    const { clientWidth, clientHeight } = hologramStage;
-    renderer.setSize(clientWidth, clientHeight);
-    camera.aspect = clientWidth / clientHeight;
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
   };
 
@@ -527,10 +522,24 @@ if (hologramStage) {
   const animate = () => {
     const delta = clock.getDelta();
     const elapsed = clock.elapsedTime;
-    modelGroup.position.y = Math.sin(elapsed * 1.1) * 0.05;
-    pedestal.rotation.y = elapsed * 0.06;
+    pointerX += (targetPointerX - pointerX) * 0.045;
+    pointerY += (targetPointerY - pointerY) * 0.045;
+    scrollDrift += (targetScroll - scrollDrift) * 0.06;
+
+    const mouseOffsetX = prefersReducedMotion.matches ? 0 : pointerX * 0.42;
+    const mouseOffsetY = prefersReducedMotion.matches ? 0 : pointerY * 0.16;
+    const scrollOffsetY = prefersReducedMotion.matches ? 0 : (scrollDrift - 0.5) * -1.15;
+    const scrollRotateY = prefersReducedMotion.matches ? 0 : (scrollDrift - 0.5) * 0.28;
+
+    modelGroup.position.x = mouseOffsetX;
+    modelGroup.position.y = baseYOffset + Math.sin(elapsed * 0.9) * 0.08 + scrollOffsetY + mouseOffsetY;
+    modelGroup.rotation.y = scrollRotateY + mouseOffsetX * 0.12 + elapsed * 0.04;
+    modelGroup.rotation.x = mouseOffsetY * 0.08;
+
+    pedestal.position.x = 1.15 + mouseOffsetX * 0.45;
+    pedestal.position.y = -3.2 + scrollOffsetY * 0.24;
+    pedestal.rotation.y = elapsed * 0.08 + scrollRotateY * 0.5;
     currentVrm?.update(delta);
-    controls.update();
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
   };

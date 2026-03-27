@@ -12,6 +12,13 @@
 </head>
 <body>
   <div class="custom-cursor" id="customCursor" aria-hidden="true"></div>
+  <div class="scene-background" id="sceneBackground" aria-hidden="true">
+    <div class="scene-aura"></div>
+    <div class="scene-vignette"></div>
+    <div class="scene-status" id="sceneStatus" role="status" aria-live="polite">
+      Loading background model...
+    </div>
+  </div>
 
   <div class="page-loader" id="pageLoader" aria-hidden="true">
     <div class="page-loader-panel">
@@ -55,17 +62,15 @@
         </div>
 
         <div class="hero-photo note subtle-parallax" id="heroMedia">
-          <div class="hologram-shell">
-            <div class="hologram-stage" id="hologramStage">
-              <div class="hologram-status" id="hologramStatus" role="status" aria-live="polite">
-                Loading 3D preview...
-              </div>
-              <div class="hologram-grid"></div>
-              <div class="hologram-core"></div>
-              <div class="hologram-pedestal"></div>
-            </div>
+          <div class="background-note">
+            <p class="eyebrow">Background figure</p>
+            <h3>Eku now floats behind the entire page.</h3>
+            <p>
+              The character has been moved into a full-page background scene with subtle
+              scroll drift and soft mouse parallax so the whole website feels like one space.
+            </p>
           </div>
-          <span class="scribble-tag">3D preview / Eku.vrm</span>
+          <span class="scribble-tag">Scene mode / Eku.vrm</span>
         </div>
 
         <div class="mini-note note">
