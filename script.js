@@ -4,6 +4,8 @@ import { OrbitControls } from "./vendor/three/examples/jsm/controls/OrbitControl
 import { VRMLoaderPlugin, VRMUtils } from "./vendor/three-vrm.module.js";
 
 const header = document.querySelector(".site-header");
+const pageLoader = document.querySelector("#pageLoader");
+const pageLoaderText = document.querySelector("#pageLoaderText");
 const navToggle = document.querySelector(".nav-toggle");
 const navLinks = document.querySelectorAll(".site-nav a");
 const revealItems = document.querySelectorAll(".reveal");
@@ -22,6 +24,38 @@ const heroMedia = document.querySelector("#heroMedia");
 const hologramStage = document.querySelector("#hologramStage");
 const hologramStatus = document.querySelector("#hologramStatus");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+let pageReady = false;
+let modelSettled = !hologramStage;
+
+document.body.classList.add("is-loading");
+
+const updateLoaderText = (message) => {
+  if (pageLoaderText) {
+    pageLoaderText.textContent = message;
+  }
+};
+
+const hidePageLoader = () => {
+  if (!pageReady || !modelSettled || !pageLoader) return;
+  pageLoader.classList.add("is-hidden");
+  document.body.classList.remove("is-loading");
+};
+
+window.addEventListener(
+  "load",
+  () => {
+    pageReady = true;
+    hidePageLoader();
+  },
+  { once: true }
+);
+
+window.setTimeout(() => {
+  pageReady = true;
+  modelSettled = true;
+  updateLoaderText("Opening board...");
+  hidePageLoader();
+}, 9000);
 
 const artworks = [
   { file: "0-3.jpg", title: "Rain Archive", note: "A neon-soaked memory caught between transit and static." },
@@ -245,11 +279,13 @@ if (hologramStage) {
   };
 
   if (window.location.protocol === "file:") {
+    updateLoaderText("3D preview needs a local server to load reliably.");
     setHologramStatus(
       "3D preview may be blocked when this page is opened with file://. Use a local server for reliable loading.",
       "error"
     );
   } else {
+    updateLoaderText("Preparing 3D character preview...");
     setHologramStatus("Loading 3D preview...");
   }
 
@@ -376,6 +412,9 @@ if (hologramStage) {
       controls.target.set(0, Math.max(alignedSize.y * 0.52, 1.2), 0);
       controls.update();
       setHologramStatus("3D preview ready.", "hidden");
+      updateLoaderText("Opening board...");
+      modelSettled = true;
+      hidePageLoader();
     },
     undefined,
     (error) => {
@@ -384,6 +423,9 @@ if (hologramStage) {
         "3D preview could not load. Try opening the site from a local web server instead of file://.",
         "error"
       );
+      updateLoaderText("3D preview could not load, opening the board anyway...");
+      modelSettled = true;
+      hidePageLoader();
     }
   );
 
