@@ -15,31 +15,31 @@ const heroSection = document.querySelector("#heroSection");
 const parallaxLayers = document.querySelectorAll(".parallax-layer");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-const imageFiles = [
-  "0-3.jpg",
-  "1-1.jpg",
-  "1-8.jpg",
-  "1-ZR.jpg",
-  "10-5.jpg",
-  "11-2.jpg",
-  "11-8-1.jpg",
-  "11-8-2.jpg",
-  "12-6-1.jpg",
-  "16-7-2.jpg",
-  "16-8.jpg",
-  "17-6-1.jpg",
-  "17-6-2.jpg",
-  "18-1.jpg",
-  "18-2.jpg",
-  "18-6.jpg",
-  "18-7.jpg",
-  "2-1.jpg",
-  "2-8.jpg",
-  "2-D.jpg",
-  "3-1.jpg",
-  "5-6.jpg",
-  "7-6.jpg",
-  "9-5.jpg",
+const artworks = [
+  { file: "0-3.jpg", title: "Rain Archive", note: "A neon-soaked memory caught between transit and static." },
+  { file: "1-1.jpg", title: "Midnight Platform", note: "Steel, distance, and the quiet pressure of departure." },
+  { file: "1-8.jpg", title: "Signal Bloom", note: "Electric glow breaking across a compressed urban horizon." },
+  { file: "1-ZR.jpg", title: "Zero Residue", note: "A portrait of light after motion has already passed." },
+  { file: "10-5.jpg", title: "Afterline District", note: "Dense architecture softened by weather, reflection, and haze." },
+  { file: "11-2.jpg", title: "Chrome Wake", note: "Hard surfaces lit as if the city is still half-dreaming." },
+  { file: "11-8-1.jpg", title: "Ghost Circuit I", note: "First transmission from a corridor built for machines and memory." },
+  { file: "11-8-2.jpg", title: "Ghost Circuit II", note: "A companion frame where atmosphere overtakes structure." },
+  { file: "12-6-1.jpg", title: "Night Relay", note: "Signals crossing through fog, power lines, and sleepless glass." },
+  { file: "16-7-2.jpg", title: "Synthetic Weather", note: "A study of environmental glow and engineered melancholy." },
+  { file: "16-8.jpg", title: "Last Car Home", note: "Transit light receding into the blue hour of the city." },
+  { file: "17-6-1.jpg", title: "Edge Terminal I", note: "An industrial threshold where movement becomes atmosphere." },
+  { file: "17-6-2.jpg", title: "Edge Terminal II", note: "A second pass through the same structure, colder and quieter." },
+  { file: "18-1.jpg", title: "Low Signal", note: "Muted illumination and the feeling of being almost unreachable." },
+  { file: "18-2.jpg", title: "Passenger Memory", note: "A fleeting scene built around absence, motion, and reflected color." },
+  { file: "18-6.jpg", title: "Voltage Garden", note: "A neon ecosystem emerging from cables, rain, and soft blur." },
+  { file: "18-7.jpg", title: "Sleepless Block", note: "Compressed facades and windows holding scattered lives." },
+  { file: "2-1.jpg", title: "Blue Transit", note: "A quiet urban rhythm framed through cool light and velocity." },
+  { file: "2-8.jpg", title: "Signal Chamber", note: "Interior glow treated like a private weather system." },
+  { file: "2-D.jpg", title: "Drift Code", note: "An image about erosion, data, and color as residue." },
+  { file: "3-1.jpg", title: "Platform Echo", note: "Loneliness and repetition shaped by rail lines and neon depth." },
+  { file: "5-6.jpg", title: "Afterimage Street", note: "A city fragment that lingers longer than the moment itself." },
+  { file: "7-6.jpg", title: "Wire Cathedral", note: "Cables, structure, and light arranged like a digital shrine." },
+  { file: "9-5.jpg", title: "Terminal Blue", note: "A closing scene held together by cold glow and distant motion." },
 ];
 
 const finishBootSequence = () => {
@@ -97,20 +97,20 @@ if (tickerTrack) {
 }
 
 if (galleryGrid) {
-  imageFiles.forEach((fileName, index) => {
+  artworks.forEach((artwork, index) => {
     const article = document.createElement("article");
     article.className = "art-card";
     article.classList.add(index % 2 === 0 ? "slide-from-left" : "slide-from-right");
     article.tabIndex = 0;
     article.setAttribute("role", "button");
-    article.setAttribute("aria-label", `Open artwork ${fileName}`);
+    article.setAttribute("aria-label", `Open artwork ${artwork.title}`);
 
     const frame = document.createElement("div");
     frame.className = "art-frame";
 
     const image = document.createElement("img");
-    image.src = `resources/image/${fileName}`;
-    image.alt = `Artwork ${fileName}`;
+    image.src = `resources/image/${artwork.file}`;
+    image.alt = artwork.title;
     image.loading = "lazy";
 
     const meta = document.createElement("div");
@@ -121,10 +121,10 @@ if (galleryGrid) {
     label.textContent = `${String(index + 1).padStart(2, "0")} / Archive node`;
 
     const title = document.createElement("h3");
-    title.textContent = fileName.replace(".jpg", "");
+    title.textContent = artwork.title;
 
     const description = document.createElement("p");
-    description.textContent = `Local asset loaded from resources/image/${fileName}`;
+    description.textContent = artwork.note;
 
     frame.appendChild(image);
     meta.append(label, title, description);
@@ -135,7 +135,7 @@ if (galleryGrid) {
       if (!lightbox || !lightboxImage || !lightboxCaption) return;
       lightboxImage.src = image.src;
       lightboxImage.alt = image.alt;
-      lightboxCaption.textContent = fileName;
+      lightboxCaption.textContent = `${artwork.title} / ${artwork.note}`;
       lightbox.showModal();
     };
 
