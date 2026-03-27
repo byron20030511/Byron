@@ -416,7 +416,7 @@ if (sceneBackground) {
   const modelGroup = new THREE.Group();
   scene.add(modelGroup);
   let currentVrm = null;
-  let baseYOffset = -3.15;
+  let modelBaseY = 0;
   let targetPointerX = 0;
   let targetPointerY = 0;
   let pointerX = 0;
@@ -481,8 +481,8 @@ if (sceneBackground) {
 
       vrmScene.position.x -= alignedCenter.x;
       vrmScene.position.z -= alignedCenter.z;
-      baseYOffset = -(alignedBox.min.y + 3.15);
-      vrmScene.position.y += baseYOffset;
+      modelBaseY = -(alignedBox.min.y + 3.15);
+      vrmScene.position.y += modelBaseY;
       vrmScene.position.x += 1.15;
       vrmScene.position.z -= 0.85;
 
@@ -532,7 +532,7 @@ if (sceneBackground) {
     const scrollRotateY = prefersReducedMotion.matches ? 0 : (scrollDrift - 0.5) * 0.28;
 
     modelGroup.position.x = mouseOffsetX;
-    modelGroup.position.y = baseYOffset + Math.sin(elapsed * 0.9) * 0.08 + scrollOffsetY + mouseOffsetY;
+    modelGroup.position.y = Math.sin(elapsed * 0.9) * 0.08 + scrollOffsetY + mouseOffsetY;
     modelGroup.rotation.y = scrollRotateY + mouseOffsetX * 0.12 + elapsed * 0.04;
     modelGroup.rotation.x = mouseOffsetY * 0.08;
 
