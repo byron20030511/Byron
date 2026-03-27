@@ -1,5 +1,6 @@
 import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 import { FBXLoader } from "https://unpkg.com/three@0.160.0/examples/jsm/loaders/FBXLoader.js";
+import { OrbitControls } from "https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js";
 
 const header = document.querySelector(".site-header");
 const navToggle = document.querySelector(".nav-toggle");
@@ -251,6 +252,33 @@ if (hologramStage) {
   );
   camera.position.set(0, 2.6, 10);
 
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.06;
+  controls.enablePan = false;
+  controls.minDistance = 7.5;
+  controls.maxDistance = 14;
+  controls.minPolarAngle = Math.PI * 0.3;
+  controls.maxPolarAngle = Math.PI * 0.72;
+  controls.autoRotate = !prefersReducedMotion.matches;
+  controls.autoRotateSpeed = 0.9;
+  controls.target.set(0, 0.7, 0);
+  controls.update();
+
+  controls.addEventListener("start", () => {
+    hologramStage.classList.add("is-dragging");
+    controls.autoRotate = false;
+  });
+
+  controls.addEventListener("end", () => {
+    hologramStage.classList.remove("is-dragging");
+    if (!prefersReducedMotion.matches) {
+      window.setTimeout(() => {
+        controls.autoRotate = true;
+      }, 1200);
+    }
+  });
+
   const hemiLight = new THREE.HemisphereLight(0x9af3ff, 0x061018, 2.3);
   const keyLight = new THREE.DirectionalLight(0x7cf2ff, 2.8);
   keyLight.position.set(5, 8, 6);
@@ -334,9 +362,9 @@ if (hologramStage) {
   const clock = new THREE.Clock();
   const animate = () => {
     const elapsed = clock.getElapsedTime();
-    modelGroup.rotation.y = elapsed * 0.38;
     modelGroup.position.y = Math.sin(elapsed * 1.2) * 0.18;
     pedestal.rotation.y = elapsed * 0.16;
+    controls.update();
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
   };
