@@ -11,6 +11,8 @@ const lightboxClose = document.querySelector("#lightboxClose");
 const pageAudio = document.querySelector("#pageAudio");
 const audioToggle = document.querySelector("#audioToggle");
 const bootOverlay = document.querySelector("#bootOverlay");
+const heroSection = document.querySelector("#heroSection");
+const parallaxLayers = document.querySelectorAll(".parallax-layer");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const imageFiles = [
@@ -98,6 +100,7 @@ if (galleryGrid) {
   imageFiles.forEach((fileName, index) => {
     const article = document.createElement("article");
     article.className = "art-card";
+    article.classList.add(index % 2 === 0 ? "slide-from-left" : "slide-from-right");
     article.tabIndex = 0;
     article.setAttribute("role", "button");
     article.setAttribute("aria-label", `Open artwork ${fileName}`);
@@ -143,6 +146,8 @@ if (galleryGrid) {
         openLightbox();
       }
     });
+
+    observer.observe(article);
   });
 }
 
@@ -185,3 +190,56 @@ pageAudio?.addEventListener("pause", syncAudioToggle);
 pageAudio?.addEventListener("ended", syncAudioToggle);
 
 syncAudioToggle();
+
+if (!prefersReducedMotion.matches && heroSection) {
+  const updateHeroParallax = () => {
+    const rect = heroSection.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    const progress = (viewportHeight - rect.top) / (viewportHeight + rect.height);
+    const clamped = Math.max(0, Math.min(1, progress));
+    const drift = (clamped - 0.5) * 30;
+
+    parallaxLayers.forEach((layer) => {
+      const depth = Number(layer.getAttribute("data-depth") || 0);
+      const pointerX = Number(layer.getAttribute("data-pointer-x") || 0);
+      const pointerY = Number(layer.getAttribute("data-pointer-y") || 0);
+      layer.style.transform = `translate3d(${pointerX + drift * (depth / 20)}px, ${pointerY}px, 0)`;
+    });
+  };
+
+  const updatePointerParallax = (event) => {
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const offsetX = (event.clientX - centerX) / centerX;
+    const offsetY = (event.clientY - centerY) / centerY;
+
+    document.body.classList.add("is-pointer-active");
+    document.body.style.setProperty("--pointer-x", `${offsetX * 18}px`);
+    document.body.style.setProperty("--pointer-y", `${offsetY * 18}px`);
+
+    parallaxLayers.forEach((layer) => {
+      const depth = Number(layer.getAttribute("data-depth") || 0);
+      layer.setAttribute("data-pointer-x", (offsetX * depth).toFixed(2));
+      layer.setAttribute("data-pointer-y", (offsetY * depth * 0.55).toFixed(2));
+    });
+
+    updateHeroParallax();
+  };
+
+  window.addEventListener("scroll", updateHeroParallax, { passive: true });
+  window.addEventListener("mousemove", updatePointerParallax, { passive: true });
+  window.addEventListener("mouseleave", () => {
+    document.body.classList.remove("is-pointer-active");
+    document.body.style.setProperty("--pointer-x", "0px");
+    document.body.style.setProperty("--pointer-y", "0px");
+
+    parallaxLayers.forEach((layer) => {
+      layer.setAttribute("data-pointer-x", "0");
+      layer.setAttribute("data-pointer-y", "0");
+    });
+
+    updateHeroParallax();
+  });
+
+  updateHeroParallax();
+}

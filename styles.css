@@ -271,6 +271,11 @@ main {
   z-index: 1;
 }
 
+.parallax-layer {
+  will-change: transform;
+  transition: transform 220ms ease-out;
+}
+
 .hero-copy-animate,
 .hero-panel-animate,
 .audio-dock-animate,
@@ -501,7 +506,22 @@ h3 {
   margin-bottom: 1rem;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  transition: transform 220ms ease, border-color 180ms ease, box-shadow 180ms ease, opacity 220ms ease;
+}
+
+.art-card.slide-from-left {
+  opacity: 0;
+  transform: translateX(-54px) translateY(18px);
+}
+
+.art-card.slide-from-right {
+  opacity: 0;
+  transform: translateX(54px) translateY(18px);
+}
+
+.art-card.is-visible {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
 }
 
 .art-card:hover {
@@ -689,6 +709,11 @@ blockquote {
   opacity: 1;
   transform: translateY(0);
   filter: saturate(1);
+}
+
+body.is-pointer-active .hero::before {
+  transform: translate3d(calc(var(--pointer-x, 0px) * 0.2), calc(var(--pointer-y, 0px) * 0.2), 0);
+  transition: transform 180ms ease-out;
 }
 
 @keyframes marquee {
