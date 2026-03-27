@@ -2,6 +2,7 @@ const header = document.querySelector(".site-header");
 const navToggle = document.querySelector(".nav-toggle");
 const navLinks = document.querySelectorAll(".site-nav a");
 const revealItems = document.querySelectorAll(".reveal");
+const tickerTrack = document.querySelector(".ticker-track");
 
 if (navToggle && header) {
   navToggle.addEventListener("click", () => {
@@ -32,3 +33,9 @@ const observer = new IntersectionObserver(
 );
 
 revealItems.forEach((item) => observer.observe(item));
+
+if (tickerTrack) {
+  const clone = tickerTrack.cloneNode(true);
+  clone.setAttribute("aria-hidden", "true");
+  tickerTrack.parentElement?.append(clone);
+}

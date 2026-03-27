@@ -3,31 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Byron Studio</title>
+  <title>Byron Neon Archive</title>
   <meta
     name="description"
-    content="A bold, modern website starter for a personal brand, studio, or small business."
+    content="Cyberpunk-style personal art portfolio for Byron with featured work, artist statement, and contact details."
   >
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
     rel="stylesheet"
   >
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="noise"></div>
   <div class="page-shell">
     <header class="site-header">
-      <a class="brand" href="#top">Byron Studio</a>
+      <a class="brand" href="#top">
+        <span class="brand-mark"></span>
+        Byron.exe
+      </a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-label="Open menu">
         <span></span>
         <span></span>
       </button>
       <nav class="site-nav">
-        <a href="#services">Services</a>
+        <a href="#gallery">Gallery</a>
         <a href="#about">About</a>
-        <a href="#work">Work</a>
+        <a href="#process">Process</a>
         <a href="#contact">Contact</a>
       </nav>
     </header>
@@ -35,126 +39,172 @@
     <main id="top">
       <section class="hero reveal">
         <div class="hero-copy">
-          <p class="eyebrow">Creative websites with character</p>
-          <h1>Build a web presence that feels alive.</h1>
+          <p class="eyebrow">Personal art portfolio / neon archive</p>
+          <h1>Cyberpunk worlds built from memory, signal, and static.</h1>
           <p class="hero-text">
-            This starter gives you a sleek foundation for a portfolio, personal brand,
-            studio, or small business site with room to grow.
+            I create atmospheric digital art shaped by future cities, machine glow,
+            late-night transit, and the emotional residue of technology.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#contact">Start a Project</a>
-            <a class="button button-secondary" href="#work">See the Layout</a>
+            <a class="button button-primary" href="#gallery">View Selected Work</a>
+            <a class="button button-secondary" href="#contact">Commission / Contact</a>
           </div>
         </div>
 
-        <div class="hero-card">
-          <p class="card-label">Now featuring</p>
-          <ul class="hero-list">
-            <li>Responsive layout</li>
-            <li>Bold visual direction</li>
-            <li>Sections ready to customize</li>
-            <li>Light interaction out of the box</li>
-          </ul>
-          <div class="stat-grid">
+        <aside class="hero-panel">
+          <div class="status-card">
+            <p class="card-label">Current transmission</p>
+            <h2>Open for commissions and collaborations.</h2>
+            <p>
+              Concept art, key visuals, posters, and personal experimental series.
+            </p>
+          </div>
+          <div class="signal-grid">
             <article>
-              <strong>01</strong>
-              <span>Landing page</span>
+              <strong>24</strong>
+              <span>Scenes archived</span>
             </article>
             <article>
-              <strong>03</strong>
-              <span>Core files</span>
+              <strong>08</strong>
+              <span>Series in progress</span>
             </article>
             <article>
-              <strong>100%</strong>
-              <span>Editable</span>
+              <strong>3D + 2D</strong>
+              <span>Hybrid workflow</span>
+            </article>
+            <article>
+              <strong>2026</strong>
+              <span>Current season</span>
             </article>
           </div>
+        </aside>
+      </section>
+
+      <section class="ticker reveal" aria-label="Art disciplines">
+        <div class="ticker-track">
+          <span>Worldbuilding</span>
+          <span>Character Mood Pieces</span>
+          <span>Neon Cityscapes</span>
+          <span>Poster Design</span>
+          <span>3D Paintovers</span>
+          <span>Visual Storytelling</span>
         </div>
       </section>
 
-      <section class="feature-strip reveal" id="services">
-        <article>
-          <p class="feature-title">Strategy</p>
-          <p>Clear messaging blocks so visitors understand who you are and what you do.</p>
-        </article>
-        <article>
-          <p class="feature-title">Design</p>
-          <p>A distinct visual system with layered color, typography, and spacing.</p>
-        </article>
-        <article>
-          <p class="feature-title">Launch</p>
-          <p>Simple file structure that is easy to host, edit, and expand later.</p>
-        </article>
+      <section class="gallery reveal" id="gallery">
+        <div class="section-heading">
+          <p class="eyebrow">Selected work</p>
+          <h2>Fragments from the city grid.</h2>
+        </div>
+        <div class="gallery-grid">
+          <article class="art-card art-card-lg magenta">
+            <p class="card-label">01 / Rain District</p>
+            <h3>Monorail Ghosts</h3>
+            <p>
+              A drenched transit corridor where signage, steel, and reflection become the composition.
+            </p>
+          </article>
+          <article class="art-card cyan">
+            <p class="card-label">02 / Character Study</p>
+            <h3>Blue Frequency</h3>
+            <p>Portrait lighting experiment focused on signal bloom and synthetic skin tones.</p>
+          </article>
+          <article class="art-card violet">
+            <p class="card-label">03 / Environment</p>
+            <h3>Night Market Core</h3>
+            <p>Compressed architecture, overhead cables, kiosks, and color noise.</p>
+          </article>
+          <article class="art-card amber">
+            <p class="card-label">04 / Poster</p>
+            <h3>Afterimage Protocol</h3>
+            <p>Editorial layout built around a fictional underground event broadcast.</p>
+          </article>
+        </div>
       </section>
 
       <section class="about-grid reveal" id="about">
-        <div>
-          <p class="eyebrow">Why this works</p>
-          <h2>Simple structure, strong first impression.</h2>
+        <div class="section-heading">
+          <p class="eyebrow">Artist statement</p>
+          <h2>I make images that feel like overheard transmissions from another future.</h2>
         </div>
         <div class="about-copy">
           <p>
-            A good website does two things at once: it communicates clearly and it
-            creates a feeling. This starter aims for both, with a flexible layout that
-            looks intentional from the beginning.
+            My work is interested in tension: soft human memory inside hard synthetic
+            spaces, quiet moments surrounded by aggressive light, and the beauty of things
+            built to outlast the people moving through them.
           </p>
           <p>
-            Swap in your own copy, projects, pricing, booking link, or brand colors and
-            you have a serious starting point rather than a blank screen.
+            I use cyberpunk aesthetics not just for style, but as a way to talk about
+            isolation, surveillance, speed, intimacy, and the strange romance of cities
+            that never fully sleep.
           </p>
         </div>
       </section>
 
-      <section class="work-grid reveal" id="work">
-        <article class="work-card accent-sand">
-          <p class="card-label">For freelancers</p>
-          <h3>Present your services with confidence.</h3>
-          <p>Use this block for offers, package tiers, or the kind of clients you help.</p>
-        </article>
-        <article class="work-card accent-sky">
-          <p class="card-label">For creators</p>
-          <h3>Turn your site into a home base.</h3>
-          <p>Add featured projects, newsletter links, media kits, or product highlights.</p>
-        </article>
-        <article class="work-card accent-ink">
-          <p class="card-label">For small teams</p>
-          <h3>Give your business a modern front door.</h3>
-          <p>Introduce your offer, team, trust signals, and contact flow in one place.</p>
-        </article>
+      <section class="process reveal" id="process">
+        <div class="section-heading">
+          <p class="eyebrow">Process</p>
+          <h2>How each piece comes online.</h2>
+        </div>
+        <div class="process-grid">
+          <article>
+            <span class="step-tag">01</span>
+            <h3>Signal capture</h3>
+            <p>I collect references from trains, street signage, industrial textures, films, and late-night photos.</p>
+          </article>
+          <article>
+            <span class="step-tag">02</span>
+            <h3>Structure pass</h3>
+            <p>Rough composition starts in grayscale or quick 3D blockouts to lock in mood and perspective.</p>
+          </article>
+          <article>
+            <span class="step-tag">03</span>
+            <h3>Neon calibration</h3>
+            <p>Color is layered carefully so the glow feels earned rather than sprayed across every surface.</p>
+          </article>
+          <article>
+            <span class="step-tag">04</span>
+            <h3>Final distortion</h3>
+            <p>Texture, grain, bloom, and selective glitch treatments give each piece its final pulse.</p>
+          </article>
+        </div>
       </section>
 
-      <section class="testimonial reveal">
-        <p class="eyebrow">First impression matters</p>
+      <section class="quote-panel reveal">
+        <p class="eyebrow">Core idea</p>
         <blockquote>
-          "A strong website should feel like meeting the brand in person:
-          clear, memorable, and easy to trust."
+          "I want the work to feel cinematic, haunted, and strangely tender at the edge of collapse."
         </blockquote>
       </section>
 
       <section class="contact reveal" id="contact">
-        <div>
-          <p class="eyebrow">Next step</p>
-          <h2>Make this your own.</h2>
+        <div class="section-heading">
+          <p class="eyebrow">Contact</p>
+          <h2>Let's build a future image together.</h2>
           <p>
-            Replace the placeholder copy with your business, portfolio, or personal
-            brand details and you're ready to publish.
+            Available for commissions, cover art, promotional visuals, and selected collaborations.
           </p>
         </div>
-        <form class="contact-card">
-          <label>
-            Name
-            <input type="text" placeholder="Your name">
-          </label>
-          <label>
-            Email
-            <input type="email" placeholder="you@example.com">
-          </label>
-          <label>
-            Project idea
-            <textarea rows="4" placeholder="Tell me what you want to build"></textarea>
-          </label>
-          <button class="button button-primary" type="button">Send Inquiry</button>
-        </form>
+        <div class="contact-grid">
+          <article class="contact-card">
+            <p class="card-label">Direct line</p>
+            <a class="contact-link" href="mailto:baoren.fan@gmail.com">baoren.fan@gmail.com</a>
+            <p>Best for project inquiries, rates, and scheduling.</p>
+          </article>
+          <article class="contact-card">
+            <p class="card-label">Social / archive</p>
+            <p>Instagram: @yourhandle</p>
+            <p>ArtStation: your-portfolio-link</p>
+            <p>Behance: your-profile-link</p>
+          </article>
+          <article class="contact-card">
+            <p class="card-label">Commission focus</p>
+            <p>Key art</p>
+            <p>Posters</p>
+            <p>Album covers</p>
+            <p>Atmospheric concept pieces</p>
+          </article>
+        </div>
       </section>
     </main>
   </div>
