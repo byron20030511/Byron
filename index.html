@@ -3,220 +3,184 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Byron Neon Archive</title>
+  <title>Byron Studio</title>
   <meta
     name="description"
-    content="Cyberpunk-style personal art portfolio for Byron with featured work, artist statement, and contact details."
-  >
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
-    rel="stylesheet"
+    content="Apple-inspired personal art portfolio for Byron featuring selected works, process, and contact information."
   >
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="is-booting">
-  <div class="boot-overlay" id="bootOverlay" aria-hidden="true">
-    <div class="boot-panel">
-      <p class="boot-label">Neon Archive / Boot Sequence</p>
-      <h2>Initializing visual grid...</h2>
-      <div class="boot-bar">
-        <span class="boot-bar-fill"></span>
-      </div>
-      <p class="boot-status">Loading city lights, image nodes, and soundtrack signal.</p>
-    </div>
-  </div>
-  <div class="noise"></div>
+<body>
   <div class="page-shell">
     <header class="site-header">
-      <a class="brand" href="#top">
-        <span class="brand-mark"></span>
-        Byron.exe
-      </a>
+      <a class="brand" href="#top">Byron</a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-label="Open menu">
         <span></span>
         <span></span>
       </button>
       <nav class="site-nav">
+        <a href="#work">Work</a>
         <a href="#gallery">Gallery</a>
-        <a href="#about">About</a>
         <a href="#process">Process</a>
         <a href="#contact">Contact</a>
       </nav>
     </header>
 
     <main id="top">
-      <section class="hero reveal" id="heroSection">
-        <div class="hero-copy hero-copy-animate parallax-layer" data-depth="22">
-          <p class="eyebrow">Personal art portfolio / neon archive</p>
-          <h1>Cyberpunk worlds built from memory, signal, and static.</h1>
+      <section class="hero reveal">
+        <div class="hero-copy">
+          <p class="eyebrow">Personal art portfolio</p>
+          <h1>Images shaped by atmosphere, memory, and light.</h1>
           <p class="hero-text">
-            I create atmospheric digital art shaped by future cities, machine glow,
-            late-night transit, and the emotional residue of technology.
+            I create cinematic digital art focused on mood, architecture, transit,
+            and the emotional tone of urban space.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#gallery">View Selected Work</a>
-            <a class="button button-secondary" href="#contact">Commission / Contact</a>
+            <a class="button button-primary" href="#gallery">View the Work</a>
+            <a class="button button-secondary" href="#contact">Contact</a>
           </div>
         </div>
+        <div class="hero-media subtle-parallax" id="heroMedia">
+          <img src="resources/image/0-3.jpg" alt="Featured artwork by Byron">
+        </div>
+      </section>
 
-        <aside class="hero-panel hero-panel-animate parallax-layer" data-depth="-18">
-          <div class="status-card hero-preview-card hero-card-animate parallax-layer" data-depth="-24">
-            <img
-              class="hero-preview"
-              src="resources/image/0-3.jpg"
-              alt="Featured cyberpunk artwork by Byron"
-            >
-          </div>
-          <div class="status-card hero-card-animate">
-            <p class="card-label">Current transmission</p>
-            <h2>Open for commissions and collaborations.</h2>
+      <section class="intro-band reveal">
+        <p>
+          A quieter, more editorial presentation of my archive. Built to let the work
+          lead, with structure that feels deliberate, minimal, and clear.
+        </p>
+      </section>
+
+      <section class="feature-grid reveal" id="work">
+        <article class="feature-card feature-card-large">
+          <div class="feature-copy">
+            <p class="eyebrow">Selected work</p>
+            <h2>Composed like stills from a longer film.</h2>
             <p>
-              Concept art, key visuals, posters, and personal experimental series.
+              My work lives between environment design, visual storytelling,
+              poster composition, and emotional atmosphere.
             </p>
           </div>
-          <div class="signal-grid hero-card-animate">
-            <article>
-              <strong>24</strong>
-              <span>Scenes archived</span>
-            </article>
-            <article>
-              <strong>08</strong>
-              <span>Series in progress</span>
-            </article>
-            <article>
-              <strong>3D + 2D</strong>
-              <span>Hybrid workflow</span>
-            </article>
-            <article>
-              <strong>2026</strong>
-              <span>Current season</span>
-            </article>
-          </div>
-        </aside>
+          <img src="resources/image/1-1.jpg" alt="Featured portfolio artwork">
+        </article>
+        <article class="feature-card">
+          <p class="eyebrow">Current focus</p>
+          <h3>Urban scenes</h3>
+          <p>Architecture, movement, reflected light, and compressed spatial rhythm.</p>
+        </article>
+        <article class="feature-card">
+          <p class="eyebrow">Medium</p>
+          <h3>Digital image-making</h3>
+          <p>2D painting, 3D blockouts, compositing, color grading, and finish work.</p>
+        </article>
+        <article class="feature-card">
+          <p class="eyebrow">Available for</p>
+          <h3>Commissioned visuals</h3>
+          <p>Key art, album covers, posters, editorial images, and concept pieces.</p>
+        </article>
       </section>
 
-      <section class="ticker reveal" aria-label="Art disciplines">
-        <div class="ticker-track">
-          <span>Worldbuilding</span>
-          <span>Character Mood Pieces</span>
-          <span>Neon Cityscapes</span>
-          <span>Poster Design</span>
-          <span>3D Paintovers</span>
-          <span>Visual Storytelling</span>
-        </div>
-      </section>
-
-      <section class="gallery reveal" id="gallery">
+      <section class="gallery-section reveal" id="gallery">
         <div class="section-heading">
-          <p class="eyebrow">Selected work</p>
-          <h2>Full archive loaded from local resources.</h2>
+          <p class="eyebrow">Gallery</p>
+          <h2>A larger look at the archive.</h2>
+          <p>Tap or click any image to view it in full detail.</p>
         </div>
         <div class="gallery-grid" id="galleryGrid"></div>
       </section>
 
-      <section class="about-grid reveal" id="about">
-        <div class="section-heading">
+      <section class="statement reveal">
+        <div class="statement-copy">
           <p class="eyebrow">Artist statement</p>
-          <h2>I make images that feel like overheard transmissions from another future.</h2>
+          <h2>I am interested in the space between stillness and motion.</h2>
         </div>
-        <div class="about-copy">
+        <div class="statement-body">
           <p>
-            My work is interested in tension: soft human memory inside hard synthetic
-            spaces, quiet moments surrounded by aggressive light, and the beauty of things
-            built to outlast the people moving through them.
+            My images often begin with architecture, public transit, weather, and the
+            way light settles into a city after dark. I am drawn to moments that feel
+            emotionally precise even when they remain quiet.
           </p>
           <p>
-            I use cyberpunk aesthetics not just for style, but as a way to talk about
-            isolation, surveillance, speed, intimacy, and the strange romance of cities
-            that never fully sleep.
+            Rather than building spectacle for its own sake, I try to make images that
+            hold tension and softness at the same time. The result is usually cinematic,
+            restrained, and focused on atmosphere.
           </p>
         </div>
       </section>
 
-      <section class="process reveal" id="process">
+      <section class="process-section reveal" id="process">
         <div class="section-heading">
           <p class="eyebrow">Process</p>
-          <h2>How each piece comes online.</h2>
+          <h2>Built in stages, refined with intention.</h2>
         </div>
         <div class="process-grid">
-          <article>
-            <span class="step-tag">01</span>
-            <h3>Signal capture</h3>
-            <p>I collect references from trains, street signage, industrial textures, films, and late-night photos.</p>
+          <article class="process-card">
+            <span>01</span>
+            <h3>Reference</h3>
+            <p>I gather architecture, transit, signage, weather, and film stills to establish tone.</p>
           </article>
-          <article>
-            <span class="step-tag">02</span>
-            <h3>Structure pass</h3>
-            <p>Rough composition starts in grayscale or quick 3D blockouts to lock in mood and perspective.</p>
+          <article class="process-card">
+            <span>02</span>
+            <h3>Structure</h3>
+            <p>Each image begins with composition, perspective, and a simple lighting plan.</p>
           </article>
-          <article>
-            <span class="step-tag">03</span>
-            <h3>Neon calibration</h3>
-            <p>Color is layered carefully so the glow feels earned rather than sprayed across every surface.</p>
+          <article class="process-card">
+            <span>03</span>
+            <h3>Color</h3>
+            <p>Color is introduced carefully so the image feels cohesive rather than decorative.</p>
           </article>
-          <article>
-            <span class="step-tag">04</span>
-            <h3>Final distortion</h3>
-            <p>Texture, grain, bloom, and selective glitch treatments give each piece its final pulse.</p>
+          <article class="process-card">
+            <span>04</span>
+            <h3>Finish</h3>
+            <p>Texture, edge control, softness, and contrast shape the final emotional weight.</p>
           </article>
         </div>
       </section>
 
-      <section class="quote-panel reveal">
-        <p class="eyebrow">Core idea</p>
-        <blockquote>
-          "I want the work to feel cinematic, haunted, and strangely tender at the edge of collapse."
-        </blockquote>
+      <section class="soundtrack-section reveal">
+        <div class="section-heading">
+          <p class="eyebrow">Soundtrack</p>
+          <h2>An optional listening layer for the archive.</h2>
+        </div>
+        <div class="soundtrack-card">
+          <div>
+            <strong>base.ogg</strong>
+            <p>Play it while browsing if you want the site to feel more like a continuous scene.</p>
+          </div>
+          <div class="audio-controls">
+            <button class="button button-secondary" id="audioToggle" type="button" aria-pressed="false">
+              Play Audio
+            </button>
+            <audio id="pageAudio" controls loop preload="metadata">
+              <source src="resources/music/base.ogg" type="audio/ogg">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        </div>
       </section>
 
-      <section class="contact reveal" id="contact">
+      <section class="contact-section reveal" id="contact">
         <div class="section-heading">
           <p class="eyebrow">Contact</p>
-          <h2>Let's build a future image together.</h2>
-          <p>
-            Available for commissions, cover art, promotional visuals, and selected collaborations.
-          </p>
+          <h2>Available for selected commissions and collaborations.</h2>
+          <p>If you have a project in mind, I'd be glad to hear about it.</p>
         </div>
         <div class="contact-grid">
           <article class="contact-card">
-            <p class="card-label">Direct line</p>
+            <p class="eyebrow">Email</p>
             <a class="contact-link" href="mailto:baoren.fan@gmail.com">baoren.fan@gmail.com</a>
-            <p>Best for project inquiries, rates, and scheduling.</p>
+            <p>For project inquiries, timelines, and rates.</p>
           </article>
           <article class="contact-card">
-            <p class="card-label">Social / archive</p>
+            <p class="eyebrow">Platforms</p>
             <p>Instagram: @yourhandle</p>
             <p>ArtStation: your-portfolio-link</p>
             <p>Behance: your-profile-link</p>
           </article>
-          <article class="contact-card">
-            <p class="card-label">Commission focus</p>
-            <p>Key art</p>
-            <p>Posters</p>
-            <p>Album covers</p>
-            <p>Atmospheric concept pieces</p>
-          </article>
         </div>
       </section>
     </main>
-  </div>
-
-  <div class="audio-dock reveal audio-dock-animate">
-    <div class="audio-head">
-      <div>
-      <p class="card-label">Soundtrack</p>
-      <strong>base.ogg</strong>
-      </div>
-      <button class="audio-toggle" id="audioToggle" type="button" aria-pressed="false">
-        Play Music
-      </button>
-    </div>
-    <audio id="pageAudio" controls loop preload="metadata">
-      <source src="resources/music/base.ogg" type="audio/ogg">
-      Your browser does not support the audio element.
-    </audio>
   </div>
 
   <dialog class="lightbox" id="lightbox">

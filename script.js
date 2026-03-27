@@ -2,7 +2,6 @@ const header = document.querySelector(".site-header");
 const navToggle = document.querySelector(".nav-toggle");
 const navLinks = document.querySelectorAll(".site-nav a");
 const revealItems = document.querySelectorAll(".reveal");
-const tickerTrack = document.querySelector(".ticker-track");
 const galleryGrid = document.querySelector("#galleryGrid");
 const lightbox = document.querySelector("#lightbox");
 const lightboxImage = document.querySelector("#lightboxImage");
@@ -10,9 +9,7 @@ const lightboxCaption = document.querySelector("#lightboxCaption");
 const lightboxClose = document.querySelector("#lightboxClose");
 const pageAudio = document.querySelector("#pageAudio");
 const audioToggle = document.querySelector("#audioToggle");
-const bootOverlay = document.querySelector("#bootOverlay");
-const heroSection = document.querySelector("#heroSection");
-const parallaxLayers = document.querySelectorAll(".parallax-layer");
+const heroMedia = document.querySelector("#heroMedia");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const artworks = [
@@ -42,24 +39,6 @@ const artworks = [
   { file: "9-5.jpg", title: "Terminal Blue", note: "A closing scene held together by cold glow and distant motion." },
 ];
 
-const finishBootSequence = () => {
-  document.body.classList.add("is-ready");
-  document.body.classList.remove("is-booting");
-
-  if (bootOverlay) {
-    bootOverlay.classList.add("is-hidden");
-    window.setTimeout(() => {
-      bootOverlay.remove();
-    }, 800);
-  }
-};
-
-if (prefersReducedMotion.matches) {
-  finishBootSequence();
-} else {
-  window.setTimeout(finishBootSequence, 1800);
-}
-
 if (navToggle && header) {
   navToggle.addEventListener("click", () => {
     const isOpen = header.classList.toggle("menu-open");
@@ -85,17 +64,11 @@ const observer = new IntersectionObserver(
     });
   },
   {
-    threshold: 0.18,
+    threshold: 0.16,
   }
 );
 
 revealItems.forEach((item) => observer.observe(item));
-
-if (tickerTrack) {
-  const clone = tickerTrack.cloneNode(true);
-  clone.setAttribute("aria-hidden", "true");
-  tickerTrack.parentElement?.append(clone);
-}
 
 if (galleryGrid) {
   artworks.forEach((artwork, index) => {
@@ -118,8 +91,8 @@ if (galleryGrid) {
     meta.className = "art-meta";
 
     const label = document.createElement("p");
-    label.className = "card-label";
-    label.textContent = `${String(index + 1).padStart(2, "0")} / Archive node`;
+    label.className = "eyebrow";
+    label.textContent = `${String(index + 1).padStart(2, "0")} / Selected work`;
 
     const title = document.createElement("h3");
     title.textContent = artwork.title;
@@ -157,8 +130,7 @@ lightboxClose?.addEventListener("click", () => {
 });
 
 lightbox?.addEventListener("click", (event) => {
-  const target = event.target;
-  if (target instanceof HTMLDialogElement) {
+  if (event.target instanceof HTMLDialogElement) {
     lightbox.close();
   }
 });
@@ -167,9 +139,8 @@ const syncAudioToggle = () => {
   if (!audioToggle || !pageAudio) return;
 
   const isPlaying = !pageAudio.paused;
-  audioToggle.textContent = isPlaying ? "Pause Music" : "Play Music";
+  audioToggle.textContent = isPlaying ? "Pause Audio" : "Play Audio";
   audioToggle.setAttribute("aria-pressed", String(isPlaying));
-  audioToggle.classList.toggle("is-playing", isPlaying);
 };
 
 audioToggle?.addEventListener("click", async () => {
@@ -189,58 +160,18 @@ audioToggle?.addEventListener("click", async () => {
 pageAudio?.addEventListener("play", syncAudioToggle);
 pageAudio?.addEventListener("pause", syncAudioToggle);
 pageAudio?.addEventListener("ended", syncAudioToggle);
-
 syncAudioToggle();
 
-if (!prefersReducedMotion.matches && heroSection) {
-  const updateHeroParallax = () => {
-    const rect = heroSection.getBoundingClientRect();
+if (!prefersReducedMotion.matches && heroMedia) {
+  const updateHeroMedia = () => {
+    const rect = heroMedia.getBoundingClientRect();
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
     const progress = (viewportHeight - rect.top) / (viewportHeight + rect.height);
     const clamped = Math.max(0, Math.min(1, progress));
-    const drift = (clamped - 0.5) * 30;
-
-    parallaxLayers.forEach((layer) => {
-      const depth = Number(layer.getAttribute("data-depth") || 0);
-      const pointerX = Number(layer.getAttribute("data-pointer-x") || 0);
-      const pointerY = Number(layer.getAttribute("data-pointer-y") || 0);
-      layer.style.transform = `translate3d(${pointerX + drift * (depth / 20)}px, ${pointerY}px, 0)`;
-    });
+    const y = (clamped - 0.5) * 18;
+    heroMedia.style.transform = `translateY(${y}px)`;
   };
 
-  const updatePointerParallax = (event) => {
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    const offsetX = (event.clientX - centerX) / centerX;
-    const offsetY = (event.clientY - centerY) / centerY;
-
-    document.body.classList.add("is-pointer-active");
-    document.body.style.setProperty("--pointer-x", `${offsetX * 18}px`);
-    document.body.style.setProperty("--pointer-y", `${offsetY * 18}px`);
-
-    parallaxLayers.forEach((layer) => {
-      const depth = Number(layer.getAttribute("data-depth") || 0);
-      layer.setAttribute("data-pointer-x", (offsetX * depth).toFixed(2));
-      layer.setAttribute("data-pointer-y", (offsetY * depth * 0.55).toFixed(2));
-    });
-
-    updateHeroParallax();
-  };
-
-  window.addEventListener("scroll", updateHeroParallax, { passive: true });
-  window.addEventListener("mousemove", updatePointerParallax, { passive: true });
-  window.addEventListener("mouseleave", () => {
-    document.body.classList.remove("is-pointer-active");
-    document.body.style.setProperty("--pointer-x", "0px");
-    document.body.style.setProperty("--pointer-y", "0px");
-
-    parallaxLayers.forEach((layer) => {
-      layer.setAttribute("data-pointer-x", "0");
-      layer.setAttribute("data-pointer-y", "0");
-    });
-
-    updateHeroParallax();
-  });
-
-  updateHeroParallax();
+  window.addEventListener("scroll", updateHeroMedia, { passive: true });
+  updateHeroMedia();
 }
