@@ -179,7 +179,7 @@ main {
 
 .hero {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 0.95fr 1.05fr;
   grid-template-areas:
     "main photo"
     "mini-a photo"
@@ -287,19 +287,27 @@ h3 {
 .hero-photo {
   grid-area: photo;
   overflow: hidden;
-  padding: 0.7rem;
+  padding: 0;
   min-height: 100%;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.hero-photo::after {
+  display: none;
 }
 
 .hologram-shell {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 4 / 5;
-  border: 2px solid var(--ink);
-  border-radius: calc(var(--radius-xl) - 8px);
+  aspect-ratio: 1 / 1.18;
+  border: 0;
+  border-radius: 40px;
   background:
-    radial-gradient(circle at 50% 25%, rgba(123, 242, 255, 0.26), transparent 22%),
-    linear-gradient(180deg, #0a1420 0%, #0d1d2e 52%, #0b1825 100%);
+    radial-gradient(circle at 50% 16%, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.2) 34%, transparent 62%),
+    radial-gradient(circle at 50% 72%, rgba(208, 201, 188, 0.32), transparent 24%),
+    linear-gradient(180deg, rgba(255, 251, 243, 0.9) 0%, rgba(247, 244, 234, 0.25) 56%, transparent 100%);
 }
 
 .hologram-stage {
@@ -315,6 +323,31 @@ h3 {
   cursor: grabbing;
 }
 
+.hologram-status {
+  position: absolute;
+  inset: auto 1rem 1rem 1rem;
+  z-index: 3;
+  padding: 0.8rem 0.95rem;
+  border: 1px solid rgba(31, 27, 22, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 253, 247, 0.88);
+  color: var(--ink);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 24px rgba(73, 56, 34, 0.08);
+}
+
+.hologram-status.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.hologram-status.is-error {
+  border-color: rgba(186, 114, 33, 0.28);
+  color: #8f4e16;
+}
+
 .hologram-grid,
 .hologram-core,
 .hologram-pedestal {
@@ -324,17 +357,13 @@ h3 {
 }
 
 .hologram-grid {
-  background:
-    linear-gradient(rgba(123, 242, 255, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(123, 242, 255, 0.08) 1px, transparent 1px);
-  background-size: 30px 30px;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.95), transparent 94%);
+  background: none;
 }
 
 .hologram-core {
   background:
-    radial-gradient(circle at 50% 38%, rgba(123, 242, 255, 0.24), transparent 16%),
-    radial-gradient(circle at 50% 62%, rgba(70, 184, 255, 0.12), transparent 28%);
+    radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.65), transparent 14%),
+    radial-gradient(circle at 50% 76%, rgba(208, 201, 188, 0.18), transparent 26%);
 }
 
 .hologram-pedestal::before,
@@ -347,21 +376,21 @@ h3 {
 }
 
 .hologram-pedestal::before {
-  bottom: 12%;
-  width: 48%;
-  height: 10%;
-  border: 2px solid rgba(123, 242, 255, 0.46);
+  bottom: 11%;
+  width: 46%;
+  height: 9%;
+  border: 1px solid rgba(31, 27, 22, 0.12);
   box-shadow:
-    0 0 30px rgba(123, 242, 255, 0.16),
-    inset 0 0 18px rgba(123, 242, 255, 0.12);
+    0 20px 34px rgba(73, 56, 34, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
 .hologram-pedestal::after {
   bottom: 8%;
   width: 36%;
   height: 6%;
-  background: rgba(123, 242, 255, 0.14);
-  filter: blur(10px);
+  background: rgba(73, 56, 34, 0.08);
+  filter: blur(18px);
 }
 
 .scribble-tag {
@@ -370,16 +399,17 @@ h3 {
   right: 1.2rem;
   display: inline-flex;
   padding: 0.35rem 0.7rem;
-  border: 2px solid var(--ink);
+  border: 1px solid rgba(31, 27, 22, 0.14);
   border-radius: 999px;
-  background: #fff29f;
+  background: rgba(255, 253, 247, 0.84);
   font-size: 0.82rem;
-  transform: rotate(4deg);
+  transform: rotate(2deg);
 }
 
 #hologramStage canvas {
   position: absolute;
   inset: 0;
+  z-index: 2;
   width: 100% !important;
   height: 100% !important;
   display: block;
