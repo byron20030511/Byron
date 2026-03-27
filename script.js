@@ -9,7 +9,10 @@ const lightboxCaption = document.querySelector("#lightboxCaption");
 const lightboxClose = document.querySelector("#lightboxClose");
 const pageAudio = document.querySelector("#pageAudio");
 const audioToggle = document.querySelector("#audioToggle");
+const floatingControls = document.querySelector(".floating-controls");
+const floatingTopButton = document.querySelector("#floatingTopButton");
 const floatingAudioToggle = document.querySelector("#floatingAudioToggle");
+const floatingAudioText = document.querySelector(".floating-audio-text");
 const heroMedia = document.querySelector("#heroMedia");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -140,7 +143,8 @@ const syncAudioToggle = () => {
   if (!pageAudio) return;
 
   const isPlaying = !pageAudio.paused;
-  const label = isPlaying ? "Pause Audio" : "Play Audio";
+  const awaitingPermission = pageAudio.paused && pageAudio.currentTime === 0;
+  const label = isPlaying ? "Pause Audio" : awaitingPermission ? "Enable Audio" : "Play Audio";
 
   if (audioToggle) {
     audioToggle.textContent = label;
@@ -149,9 +153,14 @@ const syncAudioToggle = () => {
   }
 
   if (floatingAudioToggle) {
-    floatingAudioToggle.textContent = label;
+    if (floatingAudioText) {
+      floatingAudioText.textContent = label;
+    } else {
+      floatingAudioToggle.textContent = label;
+    }
     floatingAudioToggle.setAttribute("aria-pressed", String(isPlaying));
     floatingAudioToggle.classList.toggle("is-playing", isPlaying);
+    floatingAudioToggle.classList.toggle("is-awaiting", awaitingPermission && !isPlaying);
   }
 };
 
@@ -176,6 +185,38 @@ pageAudio?.addEventListener("play", syncAudioToggle);
 pageAudio?.addEventListener("pause", syncAudioToggle);
 pageAudio?.addEventListener("ended", syncAudioToggle);
 syncAudioToggle();
+
+const syncTopButtonVisibility = () => {
+  if (!floatingControls) return;
+  const shouldShow = window.scrollY > Math.max(520, window.innerHeight * 0.8);
+  floatingControls.classList.toggle("show-top", shouldShow);
+};
+
+floatingTopButton?.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+  });
+});
+
+window.addEventListener("scroll", syncTopButtonVisibility, { passive: true });
+syncTopButtonVisibility();
+
+if (pageAudio && !prefersReducedMotion.matches) {
+  window.addEventListener(
+    "load",
+    async () => {
+      try {
+        await pageAudio.play();
+      } catch (error) {
+        console.error("Autoplay was blocked.", error);
+      } finally {
+        syncAudioToggle();
+      }
+    },
+    { once: true }
+  );
+}
 
 if (!prefersReducedMotion.matches && heroMedia) {
   const updateHeroMedia = () => {

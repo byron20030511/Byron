@@ -183,9 +183,17 @@
     </main>
   </div>
 
-  <button class="floating-audio-button" id="floatingAudioToggle" type="button" aria-pressed="false">
-    Play Audio
-  </button>
+  <div class="floating-controls">
+    <button class="floating-top-button" id="floatingTopButton" type="button" aria-label="Back to top">
+      <span class="floating-top-icon" aria-hidden="true"></span>
+      <span class="floating-top-text">Top</span>
+    </button>
+
+    <button class="floating-audio-button" id="floatingAudioToggle" type="button" aria-pressed="false">
+      <span class="floating-audio-icon" aria-hidden="true"></span>
+      <span class="floating-audio-text">Play Audio</span>
+    </button>
+  </div>
 
   <dialog class="lightbox" id="lightbox">
     <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close image">Close</button>
