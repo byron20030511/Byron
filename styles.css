@@ -459,6 +459,39 @@ h3 {
   word-break: break-word;
 }
 
+.floating-audio-button {
+  position: fixed;
+  right: 1.25rem;
+  top: 50%;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 9.5rem;
+  min-height: 3rem;
+  padding: 0.85rem 1.05rem;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--text);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: saturate(180%) blur(24px);
+  transform: translateY(-50%);
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.floating-audio-button:hover {
+  transform: translateY(calc(-50% - 1px));
+  box-shadow: var(--shadow);
+}
+
+.floating-audio-button.is-playing {
+  background: rgba(0, 113, 227, 0.92);
+  border-color: rgba(0, 113, 227, 0.2);
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(0, 113, 227, 0.24);
+}
+
 .lightbox {
   width: min(94vw, 1200px);
   padding: 1rem;
@@ -560,6 +593,17 @@ h3 {
   .site-header.menu-open .site-nav {
     display: flex;
   }
+
+  .floating-audio-button {
+    right: 0.85rem;
+    top: auto;
+    bottom: 1rem;
+    transform: none;
+  }
+
+  .floating-audio-button:hover {
+    transform: translateY(-1px);
+  }
 }
 
 @media (max-width: 640px) {
@@ -613,5 +657,12 @@ h3 {
 
   .lightbox img {
     max-height: 64vh;
+  }
+
+  .floating-audio-button {
+    right: 0.75rem;
+    bottom: 0.75rem;
+    min-width: auto;
+    padding: 0.85rem 1rem;
   }
 }

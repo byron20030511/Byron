@@ -9,6 +9,7 @@ const lightboxCaption = document.querySelector("#lightboxCaption");
 const lightboxClose = document.querySelector("#lightboxClose");
 const pageAudio = document.querySelector("#pageAudio");
 const audioToggle = document.querySelector("#audioToggle");
+const floatingAudioToggle = document.querySelector("#floatingAudioToggle");
 const heroMedia = document.querySelector("#heroMedia");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -136,14 +137,25 @@ lightbox?.addEventListener("click", (event) => {
 });
 
 const syncAudioToggle = () => {
-  if (!audioToggle || !pageAudio) return;
+  if (!pageAudio) return;
 
   const isPlaying = !pageAudio.paused;
-  audioToggle.textContent = isPlaying ? "Pause Audio" : "Play Audio";
-  audioToggle.setAttribute("aria-pressed", String(isPlaying));
+  const label = isPlaying ? "Pause Audio" : "Play Audio";
+
+  if (audioToggle) {
+    audioToggle.textContent = label;
+    audioToggle.setAttribute("aria-pressed", String(isPlaying));
+    audioToggle.classList.toggle("is-playing", isPlaying);
+  }
+
+  if (floatingAudioToggle) {
+    floatingAudioToggle.textContent = label;
+    floatingAudioToggle.setAttribute("aria-pressed", String(isPlaying));
+    floatingAudioToggle.classList.toggle("is-playing", isPlaying);
+  }
 };
 
-audioToggle?.addEventListener("click", async () => {
+const toggleAudioPlayback = async () => {
   if (!pageAudio) return;
 
   if (pageAudio.paused) {
@@ -155,7 +167,10 @@ audioToggle?.addEventListener("click", async () => {
   } else {
     pageAudio.pause();
   }
-});
+};
+
+audioToggle?.addEventListener("click", toggleAudioPlayback);
+floatingAudioToggle?.addEventListener("click", toggleAudioPlayback);
 
 pageAudio?.addEventListener("play", syncAudioToggle);
 pageAudio?.addEventListener("pause", syncAudioToggle);
