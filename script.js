@@ -1,3 +1,6 @@
+import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
+import { FBXLoader } from "https://unpkg.com/three@0.160.0/examples/jsm/loaders/FBXLoader.js";
+
 const header = document.querySelector(".site-header");
 const navToggle = document.querySelector(".nav-toggle");
 const navLinks = document.querySelectorAll(".site-nav a");
@@ -14,6 +17,7 @@ const floatingTopButton = document.querySelector("#floatingTopButton");
 const floatingAudioToggle = document.querySelector("#floatingAudioToggle");
 const floatingAudioText = document.querySelector(".floating-audio-text");
 const heroMedia = document.querySelector("#heroMedia");
+const hologramStage = document.querySelector("#hologramStage");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const artworks = [
@@ -67,9 +71,7 @@ const observer = new IntersectionObserver(
       }
     });
   },
-  {
-    threshold: 0.16,
-  }
+  { threshold: 0.16 }
 );
 
 revealItems.forEach((item) => observer.observe(item));
@@ -180,7 +182,6 @@ const toggleAudioPlayback = async () => {
 
 audioToggle?.addEventListener("click", toggleAudioPlayback);
 floatingAudioToggle?.addEventListener("click", toggleAudioPlayback);
-
 pageAudio?.addEventListener("play", syncAudioToggle);
 pageAudio?.addEventListener("pause", syncAudioToggle);
 pageAudio?.addEventListener("ended", syncAudioToggle);
@@ -224,10 +225,121 @@ if (!prefersReducedMotion.matches && heroMedia) {
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
     const progress = (viewportHeight - rect.top) / (viewportHeight + rect.height);
     const clamped = Math.max(0, Math.min(1, progress));
-    const y = (clamped - 0.5) * 18;
+    const y = (clamped - 0.5) * 14;
     heroMedia.style.transform = `translateY(${y}px)`;
   };
 
   window.addEventListener("scroll", updateHeroMedia, { passive: true });
   updateHeroMedia();
+}
+
+if (hologramStage) {
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(hologramStage.clientWidth, hologramStage.clientHeight);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  hologramStage.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x0b1825, 8, 24);
+
+  const camera = new THREE.PerspectiveCamera(
+    32,
+    hologramStage.clientWidth / hologramStage.clientHeight,
+    0.1,
+    100
+  );
+  camera.position.set(0, 2.6, 10);
+
+  const hemiLight = new THREE.HemisphereLight(0x9af3ff, 0x061018, 2.3);
+  const keyLight = new THREE.DirectionalLight(0x7cf2ff, 2.8);
+  keyLight.position.set(5, 8, 6);
+  const rimLight = new THREE.PointLight(0x45b8ff, 2.2, 30);
+  rimLight.position.set(-4, 3, -3);
+  scene.add(hemiLight, keyLight, rimLight);
+
+  const pedestal = new THREE.Mesh(
+    new THREE.CylinderGeometry(2.1, 2.7, 0.3, 48, 1, true),
+    new THREE.MeshBasicMaterial({
+      color: 0x57dfff,
+      transparent: true,
+      opacity: 0.14,
+      wireframe: true,
+    })
+  );
+  pedestal.position.y = -2.7;
+  scene.add(pedestal);
+
+  const loader = new FBXLoader();
+  const modelGroup = new THREE.Group();
+  scene.add(modelGroup);
+
+  const hologramMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0x7cf2ff,
+    emissive: 0x58d6ff,
+    emissiveIntensity: 0.75,
+    transparent: true,
+    opacity: 0.42,
+    roughness: 0.2,
+    metalness: 0.05,
+    transmission: 0.12,
+    thickness: 0.4,
+  });
+
+  const outlineMaterial = new THREE.MeshBasicMaterial({
+    color: 0xbef9ff,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.08,
+  });
+
+  loader.load(
+    "resources/3D/Eku.fbx",
+    (fbx) => {
+      const box = new THREE.Box3().setFromObject(fbx);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+      const maxAxis = Math.max(size.x, size.y, size.z) || 1;
+      const scale = 4.6 / maxAxis;
+
+      fbx.scale.setScalar(scale);
+      fbx.position.sub(center.multiplyScalar(scale));
+      fbx.position.y -= 1.6;
+
+      fbx.traverse((child) => {
+        if (child.isMesh) {
+          child.material = hologramMaterial.clone();
+          const wire = new THREE.Mesh(child.geometry, outlineMaterial.clone());
+          child.add(wire);
+        }
+      });
+
+      modelGroup.add(fbx);
+    },
+    undefined,
+    (error) => {
+      console.error("FBX load failed.", error);
+    }
+  );
+
+  const resizeRenderer = () => {
+    const { clientWidth, clientHeight } = hologramStage;
+    renderer.setSize(clientWidth, clientHeight);
+    camera.aspect = clientWidth / clientHeight;
+    camera.updateProjectionMatrix();
+  };
+
+  window.addEventListener("resize", resizeRenderer);
+
+  const clock = new THREE.Clock();
+  const animate = () => {
+    const elapsed = clock.getElapsedTime();
+    modelGroup.rotation.y = elapsed * 0.38;
+    modelGroup.position.y = Math.sin(elapsed * 1.2) * 0.18;
+    pedestal.rotation.y = elapsed * 0.16;
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  };
+
+  animate();
 }

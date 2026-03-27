@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Byron Studio</title>
+  <title>Byron Board</title>
   <meta
     name="description"
-    content="Apple-inspired personal art portfolio for Byron featuring selected works, process, and contact information."
+    content="Whiteboard-style personal art portfolio for Byron with sketches, notes, gallery, and contact details."
   >
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="page-shell">
     <header class="site-header">
-      <a class="brand" href="#top">Byron</a>
+      <a class="brand" href="#top">Byron Board</a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-label="Open menu">
         <span></span>
         <span></span>
       </button>
       <nav class="site-nav">
-        <a href="#work">Work</a>
+        <a href="#board">Board</a>
         <a href="#gallery">Gallery</a>
         <a href="#process">Process</a>
         <a href="#contact">Contact</a>
@@ -27,126 +27,135 @@
     </header>
 
     <main id="top">
-      <section class="hero reveal">
-        <div class="hero-copy">
-          <p class="eyebrow">Personal art portfolio</p>
-          <h1>Images shaped by atmosphere, memory, and light.</h1>
+      <section class="hero reveal" id="board">
+        <div class="hero-note note note-wide">
+          <p class="eyebrow">Pinned to board</p>
+          <h1>Atmosphere studies, city fragments, and unfinished feelings.</h1>
           <p class="hero-text">
-            I create cinematic digital art focused on mood, architecture, transit,
-            and the emotional tone of urban space.
+            This portfolio is arranged like a studio whiteboard: reference notes,
+            work-in-progress thinking, selected images, and a few clues about how the
+            pieces come together.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#gallery">View the Work</a>
-            <a class="button button-secondary" href="#contact">Contact</a>
+            <a class="button button-primary" href="#gallery">Open Gallery</a>
+            <a class="button button-secondary" href="#contact">Leave a Note</a>
           </div>
         </div>
-        <div class="hero-media subtle-parallax" id="heroMedia">
-          <img src="resources/image/0-3.jpg" alt="Featured artwork by Byron">
-        </div>
-      </section>
 
-      <section class="intro-band reveal">
-        <p>
-          A quieter, more editorial presentation of my archive. Built to let the work
-          lead, with structure that feels deliberate, minimal, and clear.
-        </p>
-      </section>
-
-      <section class="feature-grid reveal" id="work">
-        <article class="feature-card feature-card-large">
-          <div class="feature-copy">
-            <p class="eyebrow">Selected work</p>
-            <h2>Composed like stills from a longer film.</h2>
-            <p>
-              My work lives between environment design, visual storytelling,
-              poster composition, and emotional atmosphere.
-            </p>
+        <div class="hero-photo note subtle-parallax" id="heroMedia">
+          <div class="hologram-shell">
+            <div class="hologram-stage" id="hologramStage">
+              <div class="hologram-grid"></div>
+              <div class="hologram-core"></div>
+              <div class="hologram-pedestal"></div>
+            </div>
           </div>
-          <img src="resources/image/1-1.jpg" alt="Featured portfolio artwork">
-        </article>
-        <article class="feature-card">
-          <p class="eyebrow">Current focus</p>
-          <h3>Urban scenes</h3>
-          <p>Architecture, movement, reflected light, and compressed spatial rhythm.</p>
-        </article>
-        <article class="feature-card">
-          <p class="eyebrow">Medium</p>
-          <h3>Digital image-making</h3>
-          <p>2D painting, 3D blockouts, compositing, color grading, and finish work.</p>
-        </article>
-        <article class="feature-card">
+          <span class="scribble-tag">3D preview / Eku.fbx</span>
+        </div>
+
+        <div class="mini-note note">
+          <p class="eyebrow">Currently exploring</p>
+          <p>Transit light, rain reflection, compressed architecture, and late-night stillness.</p>
+        </div>
+
+        <div class="mini-note note tape-note">
           <p class="eyebrow">Available for</p>
-          <h3>Commissioned visuals</h3>
-          <p>Key art, album covers, posters, editorial images, and concept pieces.</p>
+          <p>Posters, cover art, key visuals, editorial images, and concept pieces.</p>
+        </div>
+      </section>
+
+      <section class="board-grid reveal">
+        <article class="note board-card board-card-large">
+          <p class="eyebrow">What this archive is</p>
+          <h2>A working wall of images, references, and emotional decisions.</h2>
+          <p>
+            I use image-making to test how light, distance, structure, and memory behave
+            when they are compressed into a single frame.
+          </p>
+        </article>
+        <article class="note board-card yellow-note">
+          <p class="eyebrow">Focus</p>
+          <h3>Urban image-making</h3>
+          <p>Architecture, weather, signage, movement, and visual quiet.</p>
+        </article>
+        <article class="note board-card blue-note">
+          <p class="eyebrow">Tools</p>
+          <h3>Hybrid workflow</h3>
+          <p>2D painting, 3D blockout, compositing, grading, and finish passes.</p>
+        </article>
+        <article class="note board-card pink-note">
+          <p class="eyebrow">Intent</p>
+          <h3>Less spectacle, more atmosphere</h3>
+          <p>I want the images to feel observed, not over-explained.</p>
         </article>
       </section>
 
       <section class="gallery-section reveal" id="gallery">
         <div class="section-heading">
-          <p class="eyebrow">Gallery</p>
-          <h2>A larger look at the archive.</h2>
-          <p>Tap or click any image to view it in full detail.</p>
+          <p class="eyebrow">Image wall</p>
+          <h2>Clipped up here for a closer look.</h2>
+          <p>Click any frame to open it, like pulling a print off the board.</p>
         </div>
         <div class="gallery-grid" id="galleryGrid"></div>
       </section>
 
       <section class="statement reveal">
-        <div class="statement-copy">
-          <p class="eyebrow">Artist statement</p>
-          <h2>I am interested in the space between stillness and motion.</h2>
+        <div class="note statement-note">
+          <p class="eyebrow">Artist note</p>
+          <h2>I am interested in what happens right before a place becomes memory.</h2>
         </div>
-        <div class="statement-body">
+        <div class="note statement-body">
           <p>
-            My images often begin with architecture, public transit, weather, and the
-            way light settles into a city after dark. I am drawn to moments that feel
-            emotionally precise even when they remain quiet.
+            My images often start with practical observations: station platforms, wet
+            pavement, high windows, cables, underpasses, and the strange softness that
+            appears in hard-built spaces after dark.
           </p>
           <p>
-            Rather than building spectacle for its own sake, I try to make images that
-            hold tension and softness at the same time. The result is usually cinematic,
-            restrained, and focused on atmosphere.
+            I keep returning to these places because they hold emotion without having to
+            announce it. The work usually lives somewhere between documentary attention
+            and cinematic invention.
           </p>
         </div>
       </section>
 
       <section class="process-section reveal" id="process">
         <div class="section-heading">
-          <p class="eyebrow">Process</p>
-          <h2>Built in stages, refined with intention.</h2>
+          <p class="eyebrow">Process map</p>
+          <h2>How the wall fills up.</h2>
         </div>
         <div class="process-grid">
-          <article class="process-card">
-            <span>01</span>
-            <h3>Reference</h3>
-            <p>I gather architecture, transit, signage, weather, and film stills to establish tone.</p>
+          <article class="note process-card">
+            <span>1</span>
+            <h3>Collect</h3>
+            <p>Photos, film stills, structures, weather, transit details, and rough notes.</p>
           </article>
-          <article class="process-card">
-            <span>02</span>
-            <h3>Structure</h3>
-            <p>Each image begins with composition, perspective, and a simple lighting plan.</p>
+          <article class="note process-card">
+            <span>2</span>
+            <h3>Arrange</h3>
+            <p>Composition first. I test perspective, weight, and visual rhythm before polish.</p>
           </article>
-          <article class="process-card">
-            <span>03</span>
-            <h3>Color</h3>
-            <p>Color is introduced carefully so the image feels cohesive rather than decorative.</p>
+          <article class="note process-card">
+            <span>3</span>
+            <h3>Distill</h3>
+            <p>Color is reduced to what the image actually needs, not what looks loudest.</p>
           </article>
-          <article class="process-card">
-            <span>04</span>
-            <h3>Finish</h3>
-            <p>Texture, edge control, softness, and contrast shape the final emotional weight.</p>
+          <article class="note process-card">
+            <span>4</span>
+            <h3>Pin</h3>
+            <p>The final image gets its edges, softness, grain, and the last emotional adjustment.</p>
           </article>
         </div>
       </section>
 
       <section class="soundtrack-section reveal">
         <div class="section-heading">
-          <p class="eyebrow">Soundtrack</p>
-          <h2>An optional listening layer for the archive.</h2>
+          <p class="eyebrow">Listening note</p>
+          <h2>An optional soundtrack for browsing the board.</h2>
         </div>
-        <div class="soundtrack-card">
+        <div class="note soundtrack-card">
           <div>
             <strong>base.ogg</strong>
-            <p>Play it while browsing if you want the site to feel more like a continuous scene.</p>
+            <p>Play it if you want the portfolio to feel more like a room than a webpage.</p>
           </div>
           <div class="audio-controls">
             <button class="button button-secondary" id="audioToggle" type="button" aria-pressed="false">
@@ -162,18 +171,18 @@
 
       <section class="contact-section reveal" id="contact">
         <div class="section-heading">
-          <p class="eyebrow">Contact</p>
-          <h2>Available for selected commissions and collaborations.</h2>
-          <p>If you have a project in mind, I'd be glad to hear about it.</p>
+          <p class="eyebrow">Contact slip</p>
+          <h2>If you have a project, pin it here.</h2>
+          <p>Commissions, collaborations, cover art, visual development, and editorial work.</p>
         </div>
         <div class="contact-grid">
-          <article class="contact-card">
+          <article class="note contact-card">
             <p class="eyebrow">Email</p>
             <a class="contact-link" href="mailto:baoren.fan@gmail.com">baoren.fan@gmail.com</a>
-            <p>For project inquiries, timelines, and rates.</p>
+            <p>Best for scope, timing, and rate discussions.</p>
           </article>
-          <article class="contact-card">
-            <p class="eyebrow">Platforms</p>
+          <article class="note contact-card yellow-note">
+            <p class="eyebrow">Find me</p>
             <p>Instagram: @yourhandle</p>
             <p>ArtStation: your-portfolio-link</p>
             <p>Behance: your-profile-link</p>
@@ -201,6 +210,6 @@
     <p id="lightboxCaption"></p>
   </dialog>
 
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
