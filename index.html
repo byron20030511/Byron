@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Byron Studio</title>
+  <meta
+    name="description"
+    content="A bold, modern website starter for a personal brand, studio, or small business."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="#top">Byron Studio</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-label="Open menu">
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav">
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero reveal">
+        <div class="hero-copy">
+          <p class="eyebrow">Creative websites with character</p>
+          <h1>Build a web presence that feels alive.</h1>
+          <p class="hero-text">
+            This starter gives you a sleek foundation for a portfolio, personal brand,
+            studio, or small business site with room to grow.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#contact">Start a Project</a>
+            <a class="button button-secondary" href="#work">See the Layout</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <p class="card-label">Now featuring</p>
+          <ul class="hero-list">
+            <li>Responsive layout</li>
+            <li>Bold visual direction</li>
+            <li>Sections ready to customize</li>
+            <li>Light interaction out of the box</li>
+          </ul>
+          <div class="stat-grid">
+            <article>
+              <strong>01</strong>
+              <span>Landing page</span>
+            </article>
+            <article>
+              <strong>03</strong>
+              <span>Core files</span>
+            </article>
+            <article>
+              <strong>100%</strong>
+              <span>Editable</span>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="feature-strip reveal" id="services">
+        <article>
+          <p class="feature-title">Strategy</p>
+          <p>Clear messaging blocks so visitors understand who you are and what you do.</p>
+        </article>
+        <article>
+          <p class="feature-title">Design</p>
+          <p>A distinct visual system with layered color, typography, and spacing.</p>
+        </article>
+        <article>
+          <p class="feature-title">Launch</p>
+          <p>Simple file structure that is easy to host, edit, and expand later.</p>
+        </article>
+      </section>
+
+      <section class="about-grid reveal" id="about">
+        <div>
+          <p class="eyebrow">Why this works</p>
+          <h2>Simple structure, strong first impression.</h2>
+        </div>
+        <div class="about-copy">
+          <p>
+            A good website does two things at once: it communicates clearly and it
+            creates a feeling. This starter aims for both, with a flexible layout that
+            looks intentional from the beginning.
+          </p>
+          <p>
+            Swap in your own copy, projects, pricing, booking link, or brand colors and
+            you have a serious starting point rather than a blank screen.
+          </p>
+        </div>
+      </section>
+
+      <section class="work-grid reveal" id="work">
+        <article class="work-card accent-sand">
+          <p class="card-label">For freelancers</p>
+          <h3>Present your services with confidence.</h3>
+          <p>Use this block for offers, package tiers, or the kind of clients you help.</p>
+        </article>
+        <article class="work-card accent-sky">
+          <p class="card-label">For creators</p>
+          <h3>Turn your site into a home base.</h3>
+          <p>Add featured projects, newsletter links, media kits, or product highlights.</p>
+        </article>
+        <article class="work-card accent-ink">
+          <p class="card-label">For small teams</p>
+          <h3>Give your business a modern front door.</h3>
+          <p>Introduce your offer, team, trust signals, and contact flow in one place.</p>
+        </article>
+      </section>
+
+      <section class="testimonial reveal">
+        <p class="eyebrow">First impression matters</p>
+        <blockquote>
+          "A strong website should feel like meeting the brand in person:
+          clear, memorable, and easy to trust."
+        </blockquote>
+      </section>
+
+      <section class="contact reveal" id="contact">
+        <div>
+          <p class="eyebrow">Next step</p>
+          <h2>Make this your own.</h2>
+          <p>
+            Replace the placeholder copy with your business, portfolio, or personal
+            brand details and you're ready to publish.
+          </p>
+        </div>
+        <form class="contact-card">
+          <label>
+            Name
+            <input type="text" placeholder="Your name">
+          </label>
+          <label>
+            Email
+            <input type="email" placeholder="you@example.com">
+          </label>
+          <label>
+            Project idea
+            <textarea rows="4" placeholder="Tell me what you want to build"></textarea>
+          </label>
+          <button class="button button-primary" type="button">Send Inquiry</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
