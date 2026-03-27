@@ -494,10 +494,10 @@ if (sceneBackground) {
 
       vrmScene.position.x -= alignedCenter.x;
       vrmScene.position.z -= alignedCenter.z;
-      modelBaseY = -(alignedBox.min.y + 3.15);
+      modelBaseY = -alignedBox.min.y + 4;
       vrmScene.position.y += modelBaseY;
       vrmScene.position.x += 1.15;
-      vrmScene.position.z += 5.15;
+      vrmScene.position.z -= 0.85;
 
       modelGroup.add(vrmScene);
 
@@ -593,7 +593,7 @@ if (sceneBackground) {
 
     const mouseOffsetX = prefersReducedMotion.matches ? 0 : pointerX * 0.42;
     const mouseOffsetY = prefersReducedMotion.matches ? 0 : pointerY * 0.16;
-    const scrollOffsetY = prefersReducedMotion.matches ? 0 : (scrollDrift - 0.5) * -1.15;
+    const scrollOffsetY = prefersReducedMotion.matches ? 0 : (scrollDrift - 0.5) * 1.15;
     const scrollRotateY = prefersReducedMotion.matches ? 0 : (scrollDrift - 0.5) * 0.28;
 
     modelGroup.position.x = mouseOffsetX;
