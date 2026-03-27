@@ -469,7 +469,7 @@ if (sceneBackground) {
       const box = new THREE.Box3().setFromObject(vrmScene);
       const size = box.getSize(new THREE.Vector3());
       const maxAxis = Math.max(size.x, size.y, size.z) || 1;
-      const scale = (6.6 / maxAxis) * 0.85;
+      const scale = (6.6 / maxAxis) * 0.8;
 
       vrmScene.scale.setScalar(scale);
       vrmScene.position.set(0, 0, 0);
@@ -496,15 +496,15 @@ if (sceneBackground) {
       vrmScene.position.z -= alignedCenter.z;
       modelBaseY = -alignedBox.min.y + 0;
       vrmScene.position.y += modelBaseY;
-      vrmScene.position.x -= 2.2;
+      vrmScene.position.x -= 4.8;
       vrmScene.position.z -= 0.85;
 
       modelGroup.add(vrmScene);
 
       const fitHeight = Math.max(alignedSize.y * 0.56, 1.6);
       const fitDistance = Math.max(alignedSize.y * 0.95, alignedSize.x * 1.1, 6.8);
-      camera.position.set(-1.2, fitHeight, fitDistance);
-      camera.lookAt(-1.2, Math.max(alignedSize.y * 0.54, 1.65), 0);
+      camera.position.set(-3.8, fitHeight, fitDistance);
+      camera.lookAt(-3.8, Math.max(alignedSize.y * 0.54, 1.65), 0);
 
       updateLoaderText("Loading background motion...");
       setSceneStatus("Loading motion clip...");
@@ -601,7 +601,7 @@ if (sceneBackground) {
     modelGroup.rotation.y = scrollRotateY + mouseOffsetX * 0.12;
     modelGroup.rotation.x = mouseOffsetY * 0.08;
 
-    pedestal.position.x = -2.2 + mouseOffsetX * 0.45;
+    pedestal.position.x = -4.8 + mouseOffsetX * 0.45;
     pedestal.position.y = -3.2 + scrollOffsetY * 0.24;
     pedestal.rotation.y = elapsed * 0.08 + scrollRotateY * 0.5;
 
