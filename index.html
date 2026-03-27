@@ -52,6 +52,13 @@
         </div>
 
         <aside class="hero-panel">
+          <div class="status-card hero-preview-card">
+            <img
+              class="hero-preview"
+              src="resources/image/0-3.jpg"
+              alt="Featured cyberpunk artwork by Byron"
+            >
+          </div>
           <div class="status-card">
             <p class="card-label">Current transmission</p>
             <h2>Open for commissions and collaborations.</h2>
@@ -94,32 +101,9 @@
       <section class="gallery reveal" id="gallery">
         <div class="section-heading">
           <p class="eyebrow">Selected work</p>
-          <h2>Fragments from the city grid.</h2>
+          <h2>Full archive loaded from local resources.</h2>
         </div>
-        <div class="gallery-grid">
-          <article class="art-card art-card-lg magenta">
-            <p class="card-label">01 / Rain District</p>
-            <h3>Monorail Ghosts</h3>
-            <p>
-              A drenched transit corridor where signage, steel, and reflection become the composition.
-            </p>
-          </article>
-          <article class="art-card cyan">
-            <p class="card-label">02 / Character Study</p>
-            <h3>Blue Frequency</h3>
-            <p>Portrait lighting experiment focused on signal bloom and synthetic skin tones.</p>
-          </article>
-          <article class="art-card violet">
-            <p class="card-label">03 / Environment</p>
-            <h3>Night Market Core</h3>
-            <p>Compressed architecture, overhead cables, kiosks, and color noise.</p>
-          </article>
-          <article class="art-card amber">
-            <p class="card-label">04 / Poster</p>
-            <h3>Afterimage Protocol</h3>
-            <p>Editorial layout built around a fictional underground event broadcast.</p>
-          </article>
-        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
       </section>
 
       <section class="about-grid reveal" id="about">
@@ -208,6 +192,28 @@
       </section>
     </main>
   </div>
+
+  <div class="audio-dock reveal">
+    <div class="audio-head">
+      <div>
+      <p class="card-label">Soundtrack</p>
+      <strong>base.ogg</strong>
+      </div>
+      <button class="audio-toggle" id="audioToggle" type="button" aria-pressed="false">
+        Play Music
+      </button>
+    </div>
+    <audio id="pageAudio" controls loop preload="metadata">
+      <source src="resources/music/base.ogg" type="audio/ogg">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+
+  <dialog class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close image">Close</button>
+    <img id="lightboxImage" alt="Expanded artwork preview">
+    <p id="lightboxCaption"></p>
+  </dialog>
 
   <script src="script.js"></script>
 </body>
