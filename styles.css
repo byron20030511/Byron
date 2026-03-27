@@ -35,6 +35,11 @@ body {
     radial-gradient(circle at 80% 10%, rgba(99, 243, 255, 0.16), transparent 18%),
     radial-gradient(circle at 50% 80%, rgba(140, 123, 255, 0.14), transparent 25%),
     linear-gradient(180deg, #050611 0%, #090b18 45%, #050611 100%);
+  overflow-x: hidden;
+}
+
+body.is-booting {
+  overflow: hidden;
 }
 
 body::before {
@@ -77,6 +82,72 @@ button {
   animation: drift 18s linear infinite;
 }
 
+.boot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(99, 243, 255, 0.1), transparent 28%),
+    linear-gradient(180deg, rgba(3, 4, 12, 0.97), rgba(4, 7, 19, 0.98));
+  transition: opacity 700ms ease, visibility 700ms ease;
+}
+
+.boot-overlay.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.boot-panel {
+  width: min(560px, 100%);
+  padding: 1.6rem;
+  border: 1px solid rgba(99, 243, 255, 0.24);
+  border-radius: 28px;
+  background: rgba(8, 11, 26, 0.92);
+  box-shadow: 0 0 40px rgba(99, 243, 255, 0.08);
+  animation: bootPulse 1.9s ease-in-out infinite;
+}
+
+.boot-label {
+  margin: 0 0 0.85rem;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  font-family: "Orbitron", sans-serif;
+}
+
+.boot-panel h2 {
+  margin-bottom: 1rem;
+}
+
+.boot-status {
+  margin: 1rem 0 0;
+  color: var(--muted);
+}
+
+.boot-bar {
+  position: relative;
+  height: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(99, 243, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.boot-bar-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--magenta), var(--cyan));
+  box-shadow: 0 0 22px rgba(99, 243, 255, 0.35);
+  animation: bootLoad 1.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
 .page-shell {
   width: min(1180px, calc(100% - 2rem));
   margin: 0 auto;
@@ -98,6 +169,8 @@ button {
   background: rgba(7, 9, 23, 0.72);
   backdrop-filter: blur(18px);
   box-shadow: var(--shadow);
+  transform: translateY(0);
+  transition: transform 700ms ease, opacity 700ms ease;
 }
 
 .brand,
@@ -196,6 +269,48 @@ main {
 .hero-copy {
   position: relative;
   z-index: 1;
+}
+
+.hero-copy-animate,
+.hero-panel-animate,
+.audio-dock-animate,
+.site-header {
+  opacity: 0;
+  transform: translateY(34px);
+}
+
+body.is-ready .site-header {
+  animation: riseIn 800ms ease forwards 120ms;
+}
+
+body.is-ready .hero-copy-animate {
+  animation: riseIn 900ms ease forwards 220ms;
+}
+
+body.is-ready .hero-panel-animate {
+  animation: riseIn 900ms ease forwards 360ms;
+}
+
+body.is-ready .hero-card-animate {
+  opacity: 0;
+  transform: translateY(28px) scale(0.98);
+  animation: cardIn 780ms ease forwards;
+}
+
+body.is-ready .hero-panel-animate .hero-card-animate:nth-child(1) {
+  animation-delay: 480ms;
+}
+
+body.is-ready .hero-panel-animate .hero-card-animate:nth-child(2) {
+  animation-delay: 620ms;
+}
+
+body.is-ready .hero-panel-animate .hero-card-animate:nth-child(3) {
+  animation-delay: 760ms;
+}
+
+body.is-ready .audio-dock-animate {
+  animation: riseIn 850ms ease forwards 860ms;
 }
 
 .eyebrow,
@@ -593,6 +708,51 @@ blockquote {
 
   to {
     transform: translateY(-180px);
+  }
+}
+
+@keyframes bootLoad {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes bootPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 35px rgba(99, 243, 255, 0.06);
+  }
+
+  50% {
+    box-shadow: 0 0 46px rgba(255, 79, 216, 0.1);
+  }
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(34px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 

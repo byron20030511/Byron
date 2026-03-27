@@ -10,6 +10,8 @@ const lightboxCaption = document.querySelector("#lightboxCaption");
 const lightboxClose = document.querySelector("#lightboxClose");
 const pageAudio = document.querySelector("#pageAudio");
 const audioToggle = document.querySelector("#audioToggle");
+const bootOverlay = document.querySelector("#bootOverlay");
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const imageFiles = [
   "0-3.jpg",
@@ -37,6 +39,24 @@ const imageFiles = [
   "7-6.jpg",
   "9-5.jpg",
 ];
+
+const finishBootSequence = () => {
+  document.body.classList.add("is-ready");
+  document.body.classList.remove("is-booting");
+
+  if (bootOverlay) {
+    bootOverlay.classList.add("is-hidden");
+    window.setTimeout(() => {
+      bootOverlay.remove();
+    }, 800);
+  }
+};
+
+if (prefersReducedMotion.matches) {
+  finishBootSequence();
+} else {
+  window.setTimeout(finishBootSequence, 1800);
+}
 
 if (navToggle && header) {
   navToggle.addEventListener("click", () => {

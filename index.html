@@ -16,7 +16,17 @@
   >
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="is-booting">
+  <div class="boot-overlay" id="bootOverlay" aria-hidden="true">
+    <div class="boot-panel">
+      <p class="boot-label">Neon Archive / Boot Sequence</p>
+      <h2>Initializing visual grid...</h2>
+      <div class="boot-bar">
+        <span class="boot-bar-fill"></span>
+      </div>
+      <p class="boot-status">Loading city lights, image nodes, and soundtrack signal.</p>
+    </div>
+  </div>
   <div class="noise"></div>
   <div class="page-shell">
     <header class="site-header">
@@ -38,7 +48,7 @@
 
     <main id="top">
       <section class="hero reveal">
-        <div class="hero-copy">
+        <div class="hero-copy hero-copy-animate">
           <p class="eyebrow">Personal art portfolio / neon archive</p>
           <h1>Cyberpunk worlds built from memory, signal, and static.</h1>
           <p class="hero-text">
@@ -51,22 +61,22 @@
           </div>
         </div>
 
-        <aside class="hero-panel">
-          <div class="status-card hero-preview-card">
+        <aside class="hero-panel hero-panel-animate">
+          <div class="status-card hero-preview-card hero-card-animate">
             <img
               class="hero-preview"
               src="resources/image/0-3.jpg"
               alt="Featured cyberpunk artwork by Byron"
             >
           </div>
-          <div class="status-card">
+          <div class="status-card hero-card-animate">
             <p class="card-label">Current transmission</p>
             <h2>Open for commissions and collaborations.</h2>
             <p>
               Concept art, key visuals, posters, and personal experimental series.
             </p>
           </div>
-          <div class="signal-grid">
+          <div class="signal-grid hero-card-animate">
             <article>
               <strong>24</strong>
               <span>Scenes archived</span>
@@ -193,7 +203,7 @@
     </main>
   </div>
 
-  <div class="audio-dock reveal">
+  <div class="audio-dock reveal audio-dock-animate">
     <div class="audio-head">
       <div>
       <p class="card-label">Soundtrack</p>
