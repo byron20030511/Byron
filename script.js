@@ -458,7 +458,7 @@ if (sceneBackground) {
       const box = new THREE.Box3().setFromObject(vrmScene);
       const size = box.getSize(new THREE.Vector3());
       const maxAxis = Math.max(size.x, size.y, size.z) || 1;
-      const scale = (6.6 / maxAxis) * 0.8;
+      const scale = (6.6 / maxAxis) * 0.7;
 
       vrmScene.scale.setScalar(scale);
       vrmScene.position.set(0, 0, 0);
