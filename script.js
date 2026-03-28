@@ -430,19 +430,8 @@ if (sceneBackground) {
   let isLoopTransitioning = false;
   let loopTransitionElapsed = 0;
   let modelBaseY = 0;
-  let targetPointerX = 0;
-  let targetPointerY = 0;
-  let pointerX = 0;
-  let pointerY = 0;
   let targetScroll = 0;
   let scrollDrift = 0;
-
-  if (supportsFinePointer && !prefersReducedMotion.matches) {
-    window.addEventListener("pointermove", (event) => {
-      targetPointerX = (event.clientX / window.innerWidth - 0.5) * 2;
-      targetPointerY = (event.clientY / window.innerHeight - 0.5) * 2;
-    });
-  }
 
   window.addEventListener(
     "scroll",
@@ -496,15 +485,15 @@ if (sceneBackground) {
       vrmScene.position.z -= alignedCenter.z;
       modelBaseY = -alignedBox.min.y + 0;
       vrmScene.position.y += modelBaseY;
-      vrmScene.position.x -= 4.8;
+      vrmScene.position.x -= 7.4;
       vrmScene.position.z -= 0.85;
 
       modelGroup.add(vrmScene);
 
       const fitHeight = Math.max(alignedSize.y * 0.56, 1.6);
       const fitDistance = Math.max(alignedSize.y * 0.95, alignedSize.x * 1.1, 6.8);
-      camera.position.set(-3.8, fitHeight, fitDistance);
-      camera.lookAt(-3.8, Math.max(alignedSize.y * 0.54, 1.65), 0);
+      camera.position.set(-6.1, fitHeight, fitDistance);
+      camera.lookAt(-6.1, Math.max(alignedSize.y * 0.54, 1.65), 0);
 
       updateLoaderText("Loading background motion...");
       setSceneStatus("Loading motion clip...");
@@ -587,12 +576,10 @@ if (sceneBackground) {
   const animate = () => {
     const delta = clock.getDelta();
     const elapsed = clock.elapsedTime;
-    pointerX += (targetPointerX - pointerX) * 0.045;
-    pointerY += (targetPointerY - pointerY) * 0.045;
     scrollDrift += (targetScroll - scrollDrift) * 0.06;
 
-    const mouseOffsetX = prefersReducedMotion.matches ? 0 : pointerX * 0.42;
-    const mouseOffsetY = prefersReducedMotion.matches ? 0 : pointerY * 0.16;
+    const mouseOffsetX = 0;
+    const mouseOffsetY = 0;
     const scrollOffsetY = prefersReducedMotion.matches ? 0 : (scrollDrift - 0.5) * 1.15;
     const scrollRotateY = prefersReducedMotion.matches ? 0 : (scrollDrift - 0.5) * 0.28;
 
@@ -601,7 +588,7 @@ if (sceneBackground) {
     modelGroup.rotation.y = scrollRotateY + mouseOffsetX * 0.12;
     modelGroup.rotation.x = mouseOffsetY * 0.08;
 
-    pedestal.position.x = -4.8 + mouseOffsetX * 0.45;
+    pedestal.position.x = -7.4 + mouseOffsetX * 0.45;
     pedestal.position.y = -3.2 + scrollOffsetY * 0.24;
     pedestal.rotation.y = elapsed * 0.08 + scrollRotateY * 0.5;
 
