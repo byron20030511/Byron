@@ -394,12 +394,12 @@ if (sceneBackground) {
   );
   camera.position.set(1.2, 1.4, 10.8);
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.45);
-  const keyLight = new THREE.DirectionalLight(0xf2efff, 2.2);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1.25);
+  const keyLight = new THREE.DirectionalLight(0xf2efff, 1.95);
   keyLight.position.set(4.8, 6.8, 5.8);
-  const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  const fillLight = new THREE.DirectionalLight(0xffffff, 0.68);
   fillLight.position.set(-5.4, 4.1, 3.6);
-  const rimLight = new THREE.PointLight(0x7168b3, 1.35, 24);
+  const rimLight = new THREE.PointLight(0x7168b3, 1.12, 24);
   rimLight.position.set(0.8, 2.4, -5.6);
   scene.add(ambientLight, keyLight, fillLight, rimLight);
 
