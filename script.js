@@ -485,15 +485,15 @@ if (sceneBackground) {
       vrmScene.position.z -= alignedCenter.z;
       modelBaseY = -alignedBox.min.y + 0;
       vrmScene.position.y += modelBaseY;
-      vrmScene.position.x -= 7.4;
+      vrmScene.position.x += 7.4;
       vrmScene.position.z -= 0.85;
 
       modelGroup.add(vrmScene);
 
       const fitHeight = Math.max(alignedSize.y * 0.56, 1.6);
       const fitDistance = Math.max(alignedSize.y * 0.95, alignedSize.x * 1.1, 6.8);
-      camera.position.set(-6.1, fitHeight, fitDistance);
-      camera.lookAt(-6.1, Math.max(alignedSize.y * 0.54, 1.65), 0);
+      camera.position.set(6.1, fitHeight, fitDistance);
+      camera.lookAt(6.1, Math.max(alignedSize.y * 0.54, 1.65), 0);
 
       updateLoaderText("Loading background motion...");
       setSceneStatus("Loading motion clip...");
@@ -588,7 +588,7 @@ if (sceneBackground) {
     modelGroup.rotation.y = scrollRotateY + mouseOffsetX * 0.12;
     modelGroup.rotation.x = mouseOffsetY * 0.08;
 
-    pedestal.position.x = -7.4 + mouseOffsetX * 0.45;
+    pedestal.position.x = 7.4 + mouseOffsetX * 0.45;
     pedestal.position.y = -3.2 + scrollOffsetY * 0.24;
     pedestal.rotation.y = elapsed * 0.08 + scrollRotateY * 0.5;
 
