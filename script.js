@@ -656,11 +656,6 @@ if (sceneBackground) {
   let currentVrm = null;
   let animationMixer = null;
   let activeAnimationAction = null;
-  let standbyAnimationAction = null;
-  let animationClipDuration = 0;
-  let animationBlendDuration = 0.32;
-  let isLoopTransitioning = false;
-  let loopTransitionElapsed = 0;
   let modelBaseY = 0;
   let targetScroll = 0;
   let scrollDrift = 0;
@@ -745,8 +740,6 @@ if (sceneBackground) {
 
           const clip = createVRMAnimationClip(vrmAnimation, vrm);
           animationMixer = new THREE.AnimationMixer(vrm.scene);
-          const primaryClip = clip.clone();
-          const secondaryClip = clip.clone();
 
           const configureLoopAction = (action) => {
             action.reset();
@@ -754,18 +747,13 @@ if (sceneBackground) {
             action.clampWhenFinished = false;
             action.zeroSlopeAtStart = true;
             action.zeroSlopeAtEnd = true;
-            action.setLoop(THREE.LoopOnce, 1);
+            action.setLoop(THREE.LoopRepeat, Infinity);
             action.setEffectiveTimeScale(1);
             action.setEffectiveWeight(1);
           };
 
-          activeAnimationAction = animationMixer.clipAction(primaryClip);
-          standbyAnimationAction = animationMixer.clipAction(secondaryClip);
-          animationClipDuration = primaryClip.duration;
-          animationBlendDuration = Math.min(0.4, Math.max(0.22, animationClipDuration * 0.08));
-
+          activeAnimationAction = animationMixer.clipAction(clip);
           configureLoopAction(activeAnimationAction);
-          configureLoopAction(standbyAnimationAction);
           activeAnimationAction.play();
 
           setSceneStatus("Background model ready.", "hidden");
@@ -823,36 +811,6 @@ if (sceneBackground) {
     pedestal.position.x = 7.4 + mouseOffsetX * 0.45;
     pedestal.position.y = -3.2 + scrollOffsetY * 0.24;
     pedestal.rotation.y = elapsed * 0.08 + scrollRotateY * 0.5;
-
-    if (
-      animationMixer &&
-      activeAnimationAction &&
-      standbyAnimationAction &&
-      !isLoopTransitioning &&
-      activeAnimationAction.isRunning() &&
-      animationClipDuration > animationBlendDuration &&
-      activeAnimationAction.time >= animationClipDuration - animationBlendDuration
-    ) {
-      isLoopTransitioning = true;
-      loopTransitionElapsed = 0;
-      standbyAnimationAction.reset();
-      standbyAnimationAction.setLoop(THREE.LoopOnce, 1);
-      standbyAnimationAction.play();
-      standbyAnimationAction.crossFadeFrom(activeAnimationAction, animationBlendDuration, false);
-    }
-
-    if (isLoopTransitioning) {
-      loopTransitionElapsed += delta;
-
-      if (loopTransitionElapsed >= animationBlendDuration) {
-        activeAnimationAction.stop();
-        const previousAction = activeAnimationAction;
-        activeAnimationAction = standbyAnimationAction;
-        standbyAnimationAction = previousAction;
-        isLoopTransitioning = false;
-        loopTransitionElapsed = 0;
-      }
-    }
 
     animationMixer?.update(delta);
     currentVrm?.update(delta);
