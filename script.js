@@ -37,6 +37,10 @@ let audioAnalyser;
 let audioSourceNode;
 let audioDataArray;
 let visualizerFrame = 0;
+let audioFadeFrame = 0;
+const AUDIO_TARGET_VOLUME = 0.72;
+const AUDIO_FADE_IN_MS = 900;
+const AUDIO_FADE_OUT_MS = 520;
 
 document.body.classList.add("is-loading");
 
@@ -422,18 +426,76 @@ const ensureAudioVisualizer = async () => {
   startAudioVisualizer();
 };
 
+const stopAudioFade = () => {
+  if (audioFadeFrame) {
+    window.cancelAnimationFrame(audioFadeFrame);
+    audioFadeFrame = 0;
+  }
+};
+
+const fadeAudioVolume = (targetVolume, duration, onComplete) => {
+  if (!pageAudio) return;
+
+  stopAudioFade();
+
+  const startVolume = pageAudio.volume;
+  const volumeDelta = targetVolume - startVolume;
+  const startTime = performance.now();
+
+  if (Math.abs(volumeDelta) < 0.001 || duration <= 0) {
+    pageAudio.volume = targetVolume;
+    onComplete?.();
+    return;
+  }
+
+  const step = (now) => {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    pageAudio.volume = startVolume + volumeDelta * eased;
+
+    if (progress < 1) {
+      audioFadeFrame = window.requestAnimationFrame(step);
+    } else {
+      audioFadeFrame = 0;
+      pageAudio.volume = targetVolume;
+      onComplete?.();
+    }
+  };
+
+  audioFadeFrame = window.requestAnimationFrame(step);
+};
+
+const playAudioWithFade = async () => {
+  if (!pageAudio) return;
+
+  await ensureAudioVisualizer();
+  stopAudioFade();
+  pageAudio.volume = 0;
+  await pageAudio.play();
+  fadeAudioVolume(AUDIO_TARGET_VOLUME, AUDIO_FADE_IN_MS);
+};
+
+const pauseAudioWithFade = () => {
+  if (!pageAudio || pageAudio.paused) return;
+
+  fadeAudioVolume(0, AUDIO_FADE_OUT_MS, () => {
+    pageAudio.pause();
+    pageAudio.volume = AUDIO_TARGET_VOLUME;
+  });
+};
+
 const toggleAudioPlayback = async () => {
   if (!pageAudio) return;
 
   if (pageAudio.paused) {
     try {
-      await ensureAudioVisualizer();
-      await pageAudio.play();
+      await playAudioWithFade();
     } catch (error) {
       console.error("Audio playback failed.", error);
     }
   } else {
-    pageAudio.pause();
+    pauseAudioWithFade();
   }
 };
 
@@ -483,8 +545,7 @@ if (pageAudio && !prefersReducedMotion.matches) {
     "load",
     async () => {
       try {
-        await ensureAudioVisualizer();
-        await pageAudio.play();
+        await playAudioWithFade();
       } catch (error) {
         console.error("Autoplay was blocked.", error);
       } finally {
