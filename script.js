@@ -38,6 +38,7 @@ let audioSourceNode;
 let audioDataArray;
 let visualizerFrame = 0;
 let audioFadeFrame = 0;
+let pendingInteractionPlayback = false;
 const AUDIO_TARGET_VOLUME = 0.72;
 const AUDIO_FADE_IN_MS = 900;
 const AUDIO_FADE_OUT_MS = 520;
@@ -485,16 +486,30 @@ const pauseAudioWithFade = () => {
   });
 };
 
+const handleDeferredAudioStart = async () => {
+  if (!pendingInteractionPlayback || !pageAudio || !pageAudio.paused) return;
+
+  try {
+    await playAudioWithFade();
+    pendingInteractionPlayback = false;
+    window.removeEventListener("pointerdown", handleDeferredAudioStart);
+  } catch (error) {
+    console.error("Deferred audio playback failed.", error);
+  }
+};
+
 const toggleAudioPlayback = async () => {
   if (!pageAudio) return;
 
   if (pageAudio.paused) {
     try {
       await playAudioWithFade();
+      pendingInteractionPlayback = false;
     } catch (error) {
       console.error("Audio playback failed.", error);
     }
   } else {
+    pendingInteractionPlayback = false;
     pauseAudioWithFade();
   }
 };
@@ -548,6 +563,8 @@ if (pageAudio && !prefersReducedMotion.matches) {
         await playAudioWithFade();
       } catch (error) {
         console.error("Autoplay was blocked.", error);
+        pendingInteractionPlayback = true;
+        window.addEventListener("pointerdown", handleDeferredAudioStart, { once: true });
       } finally {
         syncAudioToggle();
         if (pageAudio.paused) {
