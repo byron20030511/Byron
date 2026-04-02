@@ -32,7 +32,7 @@
 
   <div class="page-shell">
     <header class="site-header">
-      <a class="brand" href="#top">Byron Board</a>
+      <a class="brand" href="#top" aria-label="Back to top">Byron</a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-label="Open menu">
         <span></span>
         <span></span>
@@ -51,11 +51,11 @@
           <p class="eyebrow">Pinned to board</p>
           <h1>3D Environment Artist Building Playable Worlds</h1>
           <p class="hero-text">
-            Byron Fan is a Game Art student at Ringling College of Art and Design focused on
+            Game Art student at Ringling College of Art and Design focused on
             real-time environment creation in Unreal Engine 5.
           </p>
           <p class="hero-text hero-text-secondary">
-            His work centers on modular asset workflows, scene composition, and lighting that
+            My work centers on modular asset workflows, scene composition, and lighting that
             turns spaces into believable, playable worlds.
           </p>
           <div class="hero-actions">
@@ -177,15 +177,18 @@
         </div>
         <div class="note soundtrack-card">
           <div>
-            <strong>base.ogg</strong>
+            <strong>ようこそ喫茶紅魔館へ</strong>
             <p>Play it if you want the portfolio to feel more like a room than a webpage.</p>
           </div>
           <div class="audio-controls">
             <button class="button button-secondary" id="audioToggle" type="button" aria-pressed="false">
               Play Audio
             </button>
+            <div class="audio-visualizer-shell" aria-hidden="true">
+              <canvas class="audio-visualizer" id="audioVisualizer"></canvas>
+            </div>
             <audio id="pageAudio" controls loop preload="metadata">
-              <source src="resources/music/base.ogg" type="audio/ogg">
+              <source src="resources/music/welcome-koumakan.mp3" type="audio/mpeg">
               Your browser does not support the audio element.
             </audio>
           </div>

@@ -20,6 +20,7 @@ const lightboxCaption = document.querySelector("#lightboxCaption");
 const lightboxClose = document.querySelector("#lightboxClose");
 const pageAudio = document.querySelector("#pageAudio");
 const audioToggle = document.querySelector("#audioToggle");
+const audioVisualizer = document.querySelector("#audioVisualizer");
 const floatingControls = document.querySelector(".floating-controls");
 const floatingTopButton = document.querySelector("#floatingTopButton");
 const floatingAudioToggle = document.querySelector("#floatingAudioToggle");
@@ -31,6 +32,11 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 const supportsFinePointer = window.matchMedia("(pointer: fine)").matches;
 let pageReady = false;
 let modelSettled = !sceneBackground;
+let audioContext;
+let audioAnalyser;
+let audioSourceNode;
+let audioDataArray;
+let visualizerFrame = 0;
 
 document.body.classList.add("is-loading");
 
@@ -291,11 +297,137 @@ const syncAudioToggle = () => {
   }
 };
 
+const resizeAudioVisualizer = () => {
+  if (!audioVisualizer) return;
+  const rect = audioVisualizer.getBoundingClientRect();
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  audioVisualizer.width = Math.max(1, Math.round(rect.width * pixelRatio));
+  audioVisualizer.height = Math.max(1, Math.round(rect.height * pixelRatio));
+};
+
+const drawIdleVisualizer = () => {
+  if (!audioVisualizer) return;
+  const context = audioVisualizer.getContext("2d");
+  if (!context) return;
+  const width = audioVisualizer.width;
+  const height = audioVisualizer.height;
+
+  context.clearRect(0, 0, width, height);
+  context.lineWidth = Math.max(1.2, width * 0.0012);
+  context.strokeStyle = "rgba(31, 30, 51, 0.22)";
+  context.beginPath();
+
+  const points = 40;
+  for (let index = 0; index <= points; index += 1) {
+    const x = (width / points) * index;
+    const wave = Math.sin(index * 0.75) * height * 0.02;
+    const y = height * 0.5 + wave;
+    if (index === 0) {
+      context.moveTo(x, y);
+    } else {
+      context.lineTo(x, y);
+    }
+  }
+
+  context.stroke();
+};
+
+const startAudioVisualizer = () => {
+  if (!audioVisualizer || !audioAnalyser || visualizerFrame || prefersReducedMotion.matches) return;
+  const context = audioVisualizer.getContext("2d");
+  if (!context) return;
+
+  const render = () => {
+    visualizerFrame = window.requestAnimationFrame(render);
+
+    if (!pageAudio || pageAudio.paused) {
+      window.cancelAnimationFrame(visualizerFrame);
+      visualizerFrame = 0;
+      drawIdleVisualizer();
+      return;
+    }
+
+    audioAnalyser.getByteTimeDomainData(audioDataArray);
+
+    const width = audioVisualizer.width;
+    const height = audioVisualizer.height;
+    context.clearRect(0, 0, width, height);
+
+    const gradient = context.createLinearGradient(0, 0, width, 0);
+    gradient.addColorStop(0, "rgba(31, 30, 51, 0.15)");
+    gradient.addColorStop(0.28, "rgba(113, 104, 179, 0.38)");
+    gradient.addColorStop(0.5, "rgba(31, 30, 51, 0.82)");
+    gradient.addColorStop(0.72, "rgba(113, 104, 179, 0.38)");
+    gradient.addColorStop(1, "rgba(31, 30, 51, 0.15)");
+
+    context.lineWidth = Math.max(1.4, width * 0.0016);
+    context.strokeStyle = gradient;
+    context.beginPath();
+
+    const sliceWidth = width / (audioDataArray.length - 1);
+    for (let index = 0; index < audioDataArray.length; index += 1) {
+      const value = audioDataArray[index] / 128;
+      const x = sliceWidth * index;
+      const y = (value * height) / 2;
+
+      if (index === 0) {
+        context.moveTo(x, y);
+      } else {
+        context.lineTo(x, y);
+      }
+    }
+
+    context.stroke();
+
+    context.strokeStyle = "rgba(31, 30, 51, 0.12)";
+    context.lineWidth = 1;
+    context.beginPath();
+    context.moveTo(0, height * 0.5);
+    context.lineTo(width, height * 0.5);
+    context.stroke();
+  };
+
+  render();
+};
+
+const ensureAudioVisualizer = async () => {
+  if (!pageAudio || !audioVisualizer || prefersReducedMotion.matches) return;
+
+  resizeAudioVisualizer();
+
+  if (!audioContext) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) {
+      drawIdleVisualizer();
+      return;
+    }
+
+    audioContext = new AudioContextClass();
+    audioAnalyser = audioContext.createAnalyser();
+    audioAnalyser.fftSize = 2048;
+    audioAnalyser.smoothingTimeConstant = 0.82;
+    audioDataArray = new Uint8Array(audioAnalyser.frequencyBinCount);
+  }
+
+  if (!audioSourceNode) {
+    audioSourceNode = audioContext.createMediaElementSource(pageAudio);
+    audioSourceNode.connect(audioAnalyser);
+    audioAnalyser.connect(audioContext.destination);
+  }
+
+  if (audioContext.state === "suspended") {
+    await audioContext.resume();
+  }
+
+  startAudioVisualizer();
+};
+
 const toggleAudioPlayback = async () => {
   if (!pageAudio) return;
 
   if (pageAudio.paused) {
     try {
+      await ensureAudioVisualizer();
       await pageAudio.play();
     } catch (error) {
       console.error("Audio playback failed.", error);
@@ -307,10 +439,28 @@ const toggleAudioPlayback = async () => {
 
 audioToggle?.addEventListener("click", toggleAudioPlayback);
 floatingAudioToggle?.addEventListener("click", toggleAudioPlayback);
-pageAudio?.addEventListener("play", syncAudioToggle);
+pageAudio?.addEventListener("play", () => {
+  syncAudioToggle();
+  if (!prefersReducedMotion.matches) {
+    ensureAudioVisualizer().catch((error) => {
+      console.error("Audio visualizer setup failed.", error);
+    });
+  }
+});
 pageAudio?.addEventListener("pause", syncAudioToggle);
 pageAudio?.addEventListener("ended", syncAudioToggle);
 syncAudioToggle();
+resizeAudioVisualizer();
+drawIdleVisualizer();
+
+window.addEventListener("resize", () => {
+  resizeAudioVisualizer();
+  if (!pageAudio?.paused) {
+    startAudioVisualizer();
+  } else {
+    drawIdleVisualizer();
+  }
+});
 
 const syncTopButtonVisibility = () => {
   if (!floatingControls) return;
@@ -333,11 +483,15 @@ if (pageAudio && !prefersReducedMotion.matches) {
     "load",
     async () => {
       try {
+        await ensureAudioVisualizer();
         await pageAudio.play();
       } catch (error) {
         console.error("Autoplay was blocked.", error);
       } finally {
         syncAudioToggle();
+        if (pageAudio.paused) {
+          drawIdleVisualizer();
+        }
       }
     },
     { once: true }
