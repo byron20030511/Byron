@@ -410,6 +410,9 @@ main {
 .hero-note {
   grid-area: main;
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 .hero-note h1,
@@ -422,8 +425,10 @@ main {
 
 h1 {
   margin: 0;
-  font-size: clamp(3rem, 8vw, 5.8rem);
-  line-height: 0.94;
+  max-width: 11ch;
+  font-size: clamp(2.85rem, 7vw, 5.2rem);
+  line-height: 0.98;
+  text-wrap: balance;
 }
 
 h2 {
@@ -467,8 +472,13 @@ h3 {
 
 .hero-text {
   max-width: 62ch;
-  margin: 1.2rem 0 0;
+  margin: 0.7rem 0 0;
   font-size: 1.08rem;
+}
+
+.hero-text-secondary {
+  max-width: 54ch;
+  margin-top: 0.2rem;
 }
 
 .hero-actions {
